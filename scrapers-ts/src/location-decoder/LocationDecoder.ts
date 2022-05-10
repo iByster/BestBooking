@@ -1,38 +1,62 @@
-import { IFormConfiguration } from '../configurations/booking.com/conf';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import path from 'path';
 import { minimal_args } from './puppeteerGunArgs';
-import { Page } from 'puppeteer';
 const ac = require('@antiadmin/anticaptchaofficial');
 import fs from 'fs';
+import {
+  IFormConfiguration,
+  IGeneralSelector,
+  ILocationDecoderConfiguration,
+  IButtonSelector,
+} from '../types';
+import { Browser, Page, Puppeteer } from 'puppeteer';
+import { Cluster } from 'puppeteer-cluster';
 // import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha';
 
 class LocationDecoder {
-  private selectors: IFormConfiguration;
+  private configurations: ILocationDecoderConfiguration[];
   private locationName: string;
-  private baseURL: URL;
-  private ac: any;
 
   constructor(
-    selectors: IFormConfiguration,
-    locationName: string,
-    baseURL: URL
+    configurations: ILocationDecoderConfiguration[],
+    locationName: string
   ) {
-    this.selectors = selectors;
+    this.configurations = configurations;
     this.locationName = locationName;
-    this.baseURL = baseURL;
     puppeteer.use(StealthPlugin());
-    // ac.setAPIKey('e399c3cfb39d72cb36df6d425cfcbc91');
   }
 
-  private async acceptCookies(page: Page) {
-    await page.waitForSelector('.css-47sehv');
-    await page.click('.css-47sehv');
+  private async click(
+    page: Page,
+    selector: IGeneralSelector | IButtonSelector
+  ) {
+    if (selector.buttonVisible === false) {
+      page.evaluate((selector) => {
+        const button = document.querySelectorAll(selector.query)[
+          selector.itemCount
+        ] as HTMLElement;
+        button.click();
+      }, selector);
+    } else {
+      await page.waitForSelector(selector.query);
+      await page.click(selector.query);
+    }
   }
 
-  private async solveCaptcha(page: Page) {
-    // Retrive reCap
+  private async acceptCookies(page: Page, acceptCookies: IGeneralSelector) {
+    try {
+      if (acceptCookies) {
+        await page.waitForSelector(acceptCookies.query);
+        await page.click(acceptCookies.query);
+      }
+    } catch (e) {
+      console.log('No cookies appeard');
+    }
+  }
+
+  private async solveCaptcha(page: Page, baseURL: URL) {
+    ac.setAPIKey('e399c3cfb39d72cb36df6d425cfcbc91');
     await page.waitForSelector('[data-key]');
     const reCaptchaSiteKey = await page.$eval('[data-key]', (element) => {
       return element.getAttribute('data-key');
@@ -42,7 +66,7 @@ class LocationDecoder {
 
     try {
       token = await ac.solveRecaptchaV3(
-        this.baseURL.href,
+        baseURL.href,
         reCaptchaSiteKey,
         0.7,
         'PAGE_ACTION_CAN_BE_EMPTY'
@@ -63,103 +87,126 @@ class LocationDecoder {
   }
 
   private async delay(time: number) {
-    return new Promise(function(resolve) { 
-        setTimeout(resolve, time)
+    return new Promise(function (resolve) {
+      setTimeout(resolve, time);
     });
- }
+  }
 
-  private async search(page: Page) {
-    const { searchButtonSelector, searchInputSelector } = this.selectors;
+  private async clearInput(page: Page) {
+    await page.keyboard.down('Control');
+    await page.keyboard.press('A');
+    await page.keyboard.up('Control');
+    await page.keyboard.press('Backspace');
+  }
 
-    await page.goto(this.baseURL.href, {
-      waitUntil: 'networkidle2',
-      // waitUntil: 'load'
-      // waitUntil: 'domcontentloaded'
-      // waitUntil: 'networkidle2'
-    });
+  private async search(
+    browser: Browser,
+    selectors: IFormConfiguration,
+    baseURL: URL,
+    needStyle: boolean
+  ) {
+    const page = await browser.newPage();
 
-    let content = await page.content();
-    fs.writeFileSync('./out.html', content);
+    //turns request interceptor on
+    await page.setRequestInterception(true);
 
-    await page.screenshot({
-      path: path.join(__dirname, 'progressPNGs', 'step0.png'),
-    });
-
-    this.acceptCookies(page);
-
-    await page.screenshot({
-      path: path.join(__dirname, 'progressPNGs', 'step1.png'),
-    });
-
-    await page.waitForSelector(searchInputSelector.query);
-    await page.waitForSelector(searchButtonSelector.query);
-
-    await page.evaluate(
-      (locationName, searchInputSelector, searchButtonSelector) => {
-        document.querySelectorAll(searchInputSelector.query)[
-          searchInputSelector.itemCount
-        ].value = locationName;
-
-        //   document.querySelector(searchButtonSelector.query).click();
-      },
-      this.locationName,
-      searchInputSelector,
-      searchButtonSelector
-    );
-
-    await page.screenshot({
-      path: path.join(__dirname, 'progressPNGs', 'step2.png'),
-    });
-
-    // await page.type(searchInputSelector.query, this.locationName, {
-    //   delay: 100,
-    // });
-
-    // await page.waitForSelector('.antigate_solver.solved').catch((_e) => console.log('failed to wait for the selector'));
-    // console.log('recaptcha solved');
-
-    await page.screenshot({
-      path: path.join(__dirname, 'progressPNGs', 'step3.png'),
+    //if the page makes a  request to a resource type of image or stylesheet then abort that            request
+    page.on('request', (request) => {
+      if (request.resourceType() === 'image') {
+        request.abort();
+      } else if (request.resourceType() === 'stylesheet') {
+        if (needStyle) {
+          request.continue();
+        } else {
+          request.abort();
+        }
+      } else {
+        request.continue();
+      }
     });
 
     await page.setDefaultNavigationTimeout(0);
+    const { searchButtonSelector, searchInputSelector } = selectors;
+
+    await page.goto(baseURL.href, {
+      waitUntil: 'domcontentloaded',
+    });
+
+    await this.delay(500);
+
+    if (selectors.acceptCookiesSelector) {
+      this.acceptCookies(page, selectors.acceptCookiesSelector);
+    }
+
+    await this.delay(500);
+
+    if (selectors.inputButtonSelector) {
+      await this.click(page, selectors.inputButtonSelector);
+    }
+
+    await this.delay(200);
+
+    await page.waitForSelector(searchInputSelector.query);
+
+    await this.clearInput(page);
+    await page.type(searchInputSelector.query, this.locationName, {
+      delay: 150,
+    });
+
+    await this.delay(1000);
+
+    if (selectors.selectInputOption) {
+      await this.click(page, selectors.selectInputOption);
+    }
+
+    await this.delay(200);
 
     await Promise.all([
-      await page.click(searchButtonSelector.query),
-      await page.waitForNavigation({ waitUntil: 'networkidle2' }),
+      await this.click(page, searchButtonSelector),
+      await page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
-    content = await page.content();
-    fs.writeFileSync('./out2.html', content);
+    const url = new URL(page.url());
 
-    // page.reload({waitUntil: 'networkidle2'});
-
-    await page.screenshot({
-      path: path.join(__dirname, 'progressPNGs', 'step4.png'),
-    });
-
-    await delay(10000);
-
-    return page.url();
+    page.close();
+    return url;
   }
 
-  public async getLocationIdFromUrl() {
+  public async getOneUrl(url: URL, selectors: IFormConfiguration, needStyle: boolean) {
     const browser = await puppeteer.launch({
-      ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
       args: minimal_args,
-      headless: true,
+      headless: false,
       userDataDir: path.join(__dirname, './userCache'),
-      slowMo: 10,
-      // proxy,
+      ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
+      // slowMo: 10,
+      defaultViewport: { width: 1920, height: 1080 },
     });
 
-    let page = await browser.newPage();
-
-    const rawUrl = await this.search(page);
+    const rawUrl = await this.search(browser, selectors, url, needStyle);
 
     console.log(rawUrl);
 
     browser.close();
+  }
+
+  public async getAllUrls() {
+    const urls: Promise<URL>[] = [];
+
+    const browser = await puppeteer.launch({
+      args: minimal_args,
+      headless: false,
+      userDataDir: path.join(__dirname, './userCache'),
+      ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
+      slowMo: 10,
+      defaultViewport: { width: 1920, height: 1080 },
+    });
+
+    for (let i = 0; i < this.configurations.length; ++i) {
+      const { formConfiguration, url, needStyle } = this.configurations[i];
+      urls.push(this.search(browser, formConfiguration, url, needStyle));
+    }
+
+    return Promise.all(urls);
   }
 }
 

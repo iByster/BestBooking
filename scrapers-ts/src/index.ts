@@ -1,18 +1,42 @@
 import LocationDecoder from './location-decoder/LocationDecoder';
-import { formConf as bookingComFormConf } from './configurations/booking.com/conf';
-import { formConf as eskyRoFormConf } from './configurations/esky.ro/conf';
+import { locationDecoderConf as bookingComLocationDecoderConf } from './configurations/booking.com/conf';
+import { locationDecoderConf as eskyRoLocationDecoderConf } from './configurations/esky.ro/conf';
+import { locationDecoderConf as directBookingRoLocationDecoderConf } from './configurations/directbooking.ro/conf';
+import { locationDecoderConf as hotelsComLocationDecoderConf } from './configurations/hotels.com/conf';
+import { locationDecoderConf as tripComLocationDecoderConf } from './configurations/trip.com/conf';
+import { locationDecoderConf as agodaComLocationDecoderConf } from './configurations/agoda.com/conf';
+import { locationDecoderConf as vrboComLocationDecoderConf } from './configurations/vrbo.com/conf';
+// nu merge
+// import { locationDecoderConf as expediaComLocationDecoderConf } from './configurations/expedia.com/conf';
+import { locationDecoderConf as allAccorComLocationDecoderConf } from './configurations/all.accor.com/conf';
 
 const main = async () => {
-  const url = 'https://www.esky.ro/cazare/search?arrivalCode=4509&arrivalType=region&rangeStartDate=2022-05-18&rangeEndDate=2022-05-18&isFlexSearch=false&stayLength=1,1&rooms[0][adults]=2&source=QSF&token=5320e2b0-41a3-4e9a-bdff-3726b26cc1cf';
-
+  const configurations = [
+    bookingComLocationDecoderConf,
+    eskyRoLocationDecoderConf,
+    // directBookingRoLocationDecoderConf,
+    hotelsComLocationDecoderConf,
+    agodaComLocationDecoderConf,
+    vrboComLocationDecoderConf,
+    allAccorComLocationDecoderConf,
+    tripComLocationDecoderConf,
+    // expediaComLocationDecoderConf
+  ]
 
   const ld = new LocationDecoder(
-       eskyRoFormConf,
-      'Miercurea-Ciuc, Harghita, Romania',
-      new URL(url),
+    configurations,
+    'New York',
   )
 
-  ld.getLocationIdFromUrl();
+  ld.getOneUrl(
+    allAccorComLocationDecoderConf.url,
+    allAccorComLocationDecoderConf.formConfiguration,
+    allAccorComLocationDecoderConf.needStyle
+  );
+
+  // console.time('Timer');
+  // console.log(await ld.getAllUrls());
+  // console.timeEnd('Timer');
 };
 
 main().catch((e) => console.log(e));

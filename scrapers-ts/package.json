@@ -21,6 +21,7 @@
     "@antiadmin/anticaptchaofficial": "^1.0.22",
     "adm-zip": "^0.5.9",
     "puppeteer": "^13.7.0",
+    "puppeteer-cluster": "^0.23.0",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-recaptcha": "^3.5.0",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
