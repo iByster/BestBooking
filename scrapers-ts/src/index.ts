@@ -14,7 +14,7 @@ const main = async () => {
   const configurations = [
     bookingComLocationDecoderConf,
     eskyRoLocationDecoderConf,
-    // directBookingRoLocationDecoderConf,
+    directBookingRoLocationDecoderConf,
     hotelsComLocationDecoderConf,
     agodaComLocationDecoderConf,
     vrboComLocationDecoderConf,
@@ -29,9 +29,9 @@ const main = async () => {
   )
 
   ld.getOneUrl(
-    bookingComLocationDecoderConf.url,
-    bookingComLocationDecoderConf.formConfiguration,
-    bookingComLocationDecoderConf.needStyle
+    directBookingRoLocationDecoderConf.url,
+    directBookingRoLocationDecoderConf.formConfiguration,
+    directBookingRoLocationDecoderConf.needStyle
   );
 
   // console.time('Timer');

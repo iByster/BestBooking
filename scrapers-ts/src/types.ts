@@ -12,6 +12,7 @@ export interface IFormConfiguration {
     searchButtonSelector: IButtonSelector;
     inputButtonSelector?: IInputSelector;
     selectInputOption?: IButtonSelector;
+    extraStep?: IGeneralSelector;
     acceptCookiesSelector? : IGeneralSelector;
 }
 

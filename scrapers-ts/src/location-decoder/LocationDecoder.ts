@@ -177,6 +177,12 @@ class LocationDecoder {
 
     await this.DOMCheckpoint(page, 1);
 
+    if (selectors.extraStep) {
+      await this.click(page, selectors.extraStep);
+    }
+
+    await this.delay(500);
+
     await Promise.all([
       await this.click(page, searchButtonSelector),
       await page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
