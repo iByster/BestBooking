@@ -7,7 +7,8 @@ export const formConf: IFormConfiguration = {
     },
   
     searchButtonSelector: {
-      query: 'button[type=submit]',
+      // query: 'button[type=submit]',
+      query: '#bookingEngine > button.tSubmit.roundButton.roundButton--accent',
       itemCount: 0,
       buttonVisible: true,
     },
@@ -26,6 +27,7 @@ export const formConf: IFormConfiguration = {
     inputButtonSelector: {
       query: '#search-destination',
       itemCount: 0,
+      focusOn: false,
   }
 };
 
@@ -33,5 +35,5 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
     formConfiguration: formConf,
     url: new URL('https://all.accor.com/usa/index.en.shtml'),
     resolveCaptcha: false,
-    needStyle: false,
+    needStyle: true,
 }

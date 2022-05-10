@@ -10,13 +10,17 @@ export interface ILocationDecoderConfiguration {
 export interface IFormConfiguration {
     searchInputSelector: IGeneralSelector;
     searchButtonSelector: IButtonSelector;
-    inputButtonSelector?: IGeneralSelector;
+    inputButtonSelector?: IInputSelector;
     selectInputOption?: IButtonSelector;
     acceptCookiesSelector? : IGeneralSelector;
 }
 
 export interface IButtonSelector extends IGeneralSelector {
     buttonVisible: boolean;
+}
+
+export interface IInputSelector extends IGeneralSelector {
+    focusOn: boolean;
 }
 
 export interface IGeneralSelector extends JSONObject {

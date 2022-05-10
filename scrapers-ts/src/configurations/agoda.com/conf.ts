@@ -26,6 +26,7 @@ const formConf: IFormConfiguration = {
   inputButtonSelector: {
     query: '#SearchBoxContainer > div.Box-sc-kv6pi1-0.bpOVsR.TabContent.OpaqueBackground > div > div.Box-sc-kv6pi1-0.hRUYUu > div > div > div.IconBox.IconBox--autocomplete > div > div > input',
     itemCount: 0,
+    focusOn: false,
 }
 };
 

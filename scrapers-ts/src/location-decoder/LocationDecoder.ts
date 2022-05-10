@@ -9,6 +9,7 @@ import {
   IGeneralSelector,
   ILocationDecoderConfiguration,
   IButtonSelector,
+  IInputSelector,
 } from '../types';
 import { Browser, Page, Puppeteer } from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
@@ -29,7 +30,7 @@ class LocationDecoder {
 
   private async click(
     page: Page,
-    selector: IGeneralSelector | IButtonSelector
+    selector: IGeneralSelector | IButtonSelector | IInputSelector
   ) {
     if (selector.buttonVisible === false) {
       page.evaluate((selector) => {
@@ -38,6 +39,14 @@ class LocationDecoder {
         ] as HTMLElement;
         button.click();
       }, selector);
+    } else if (selector.focusOn === true) {
+      // page.evaluate((selector) => {
+      //   const button = document.querySelectorAll(selector.query)[
+      //     selector.itemCount
+      //   ] as HTMLElement;
+      //   button.focus();
+      // }, selector);
+      page.focus(selector.query);
     } else {
       await page.waitForSelector(selector.query);
       await page.click(selector.query);
@@ -99,6 +108,11 @@ class LocationDecoder {
     await page.keyboard.press('Backspace');
   }
 
+  private async DOMCheckpoint(page: Page, id: number) {
+    const content = await page.content();
+    fs.writeFileSync(path.join(__dirname, 'DOMCheckpoints', `out${id}`), content);
+  }
+
   private async search(
     browser: Browser,
     selectors: IFormConfiguration,
@@ -132,13 +146,13 @@ class LocationDecoder {
       waitUntil: 'domcontentloaded',
     });
 
-    await this.delay(500);
+    await this.delay(700);
 
     if (selectors.acceptCookiesSelector) {
       this.acceptCookies(page, selectors.acceptCookiesSelector);
     }
 
-    await this.delay(500);
+    await this.delay(700);
 
     if (selectors.inputButtonSelector) {
       await this.click(page, selectors.inputButtonSelector);
@@ -160,6 +174,8 @@ class LocationDecoder {
     }
 
     await this.delay(200);
+
+    await this.DOMCheckpoint(page, 1);
 
     await Promise.all([
       await this.click(page, searchButtonSelector),

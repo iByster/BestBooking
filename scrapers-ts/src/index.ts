@@ -29,9 +29,9 @@ const main = async () => {
   )
 
   ld.getOneUrl(
-    allAccorComLocationDecoderConf.url,
-    allAccorComLocationDecoderConf.formConfiguration,
-    allAccorComLocationDecoderConf.needStyle
+    agodaComLocationDecoderConf.url,
+    agodaComLocationDecoderConf.formConfiguration,
+    agodaComLocationDecoderConf.needStyle
   );
 
   // console.time('Timer');
