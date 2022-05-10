@@ -16,12 +16,13 @@ export const formConf: IFormConfiguration = {
     selectInputOption: {
       query: '#frm > div.xp__fieldset.js--sb-fieldset.accommodation > div.xp__input-group.xp__search > div:nth-child(11) > div.c-autocomplete.sb-destination.-with-clear.region_second_line > ul.c-autocomplete__list.sb-autocomplete__list.sb-autocomplete__list-with_photos > li:first-child',
       itemCount: 0,
-      
+      buttonVisible: true,
     },
 
     inputButtonSelector: {
       query: '#ss',
       itemCount: 0,
+      focusOn: false,
   }
 };
 
