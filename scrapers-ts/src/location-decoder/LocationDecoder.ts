@@ -40,12 +40,6 @@ class LocationDecoder {
         button.click();
       }, selector);
     } else if (selector.focusOn === true) {
-      // page.evaluate((selector) => {
-      //   const button = document.querySelectorAll(selector.query)[
-      //     selector.itemCount
-      //   ] as HTMLElement;
-      //   button.focus();
-      // }, selector);
       page.focus(selector.query);
     } else {
       await page.waitForSelector(selector.query);
@@ -124,7 +118,7 @@ class LocationDecoder {
     //turns request interceptor on
     await page.setRequestInterception(true);
 
-    //if the page makes a  request to a resource type of image or stylesheet then abort that            request
+    //if the page makes a  request to a resource type of image or stylesheet then abort that request
     page.on('request', (request) => {
       if (request.resourceType() === 'image') {
         request.abort();

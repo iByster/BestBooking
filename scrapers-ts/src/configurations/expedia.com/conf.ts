@@ -15,12 +15,13 @@ export const formConf: IFormConfiguration = {
     selectInputOption: {
       query: '#location-field-destination-menu > div.uitk-menu-container.animation-disabled.uitk-menu-open.uitk-menu-pos-left.uitk-menu-container-text-nowrap > div.uitk-typeahead-results > ul > li:nth-child(2)',
       itemCount: 0,
-      
+      buttonVisible: true,
     },
 
     inputButtonSelector: {
-      query: '#hotels-destination-menu > div.uitk-menu-trigger > div.uitk-field.has-floatedLabel-label.has-icon.has-placeholder > button',
+      query: '#location-field-destination',
       itemCount: 0,
+      focusOn: true,
   }
 };
 
@@ -28,4 +29,5 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
     formConfiguration: formConf,
     url: new URL('https://www.expedia.com/'),
     resolveCaptcha: false,
+    needStyle: false,
 }

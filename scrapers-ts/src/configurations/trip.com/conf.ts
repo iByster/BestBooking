@@ -15,12 +15,13 @@ export const formConf: IFormConfiguration = {
     selectInputOption: {
       query: '#dropList > div:nth-of-type(1)',
       itemCount: 0,
-      
+      buttonVisible: true,
     },
 
     inputButtonSelector: {
       query: '#hotels-destination',
       itemCount: 0,
+      focusOn: false,
   }
 };
 
@@ -28,4 +29,5 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
     formConfiguration: formConf,
     url: new URL('https://www.trip.com/'),
     resolveCaptcha: false,
+    needStyle: true,
 }

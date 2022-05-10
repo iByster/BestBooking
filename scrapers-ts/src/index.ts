@@ -29,9 +29,9 @@ const main = async () => {
   )
 
   ld.getOneUrl(
-    eskyRoLocationDecoderConf.url,
-    eskyRoLocationDecoderConf.formConfiguration,
-    eskyRoLocationDecoderConf.needStyle
+    hotelsComLocationDecoderConf.url,
+    hotelsComLocationDecoderConf.formConfiguration,
+    hotelsComLocationDecoderConf.needStyle
   );
 
   // console.time('Timer');
