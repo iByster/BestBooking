@@ -25,13 +25,13 @@ const main = async () => {
 
   const ld = new LocationDecoder(
     configurations,
-    'New York',
+    'Bucuresti',
   )
 
   ld.getOneUrl(
-    directBookingRoLocationDecoderConf.url,
-    directBookingRoLocationDecoderConf.formConfiguration,
-    directBookingRoLocationDecoderConf.needStyle
+    eskyRoLocationDecoderConf.url,
+    eskyRoLocationDecoderConf.formConfiguration,
+    eskyRoLocationDecoderConf.needStyle
   );
 
   // console.time('Timer');
