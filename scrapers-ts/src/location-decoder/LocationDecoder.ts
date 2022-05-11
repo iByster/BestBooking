@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import Adblocker from 'puppeteer-extra-plugin-adblocker'
 import path from 'path';
 import { minimal_args } from './puppeteerGunArgs';
 const ac = require('@antiadmin/anticaptchaofficial');
@@ -11,7 +12,7 @@ import {
   IButtonSelector,
   IInputSelector,
 } from '../types';
-import { Browser, Page, Puppeteer } from 'puppeteer';
+import { Browser, Page } from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
 // import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha';
 
@@ -26,6 +27,9 @@ class LocationDecoder {
     this.configurations = configurations;
     this.locationName = locationName;
     puppeteer.use(StealthPlugin());
+    // puppeteer.use(Adblocker({
+    //   blockTrackers: true, // default: false
+    // }));
   }
 
   private async click(
@@ -104,23 +108,26 @@ class LocationDecoder {
 
   private async DOMCheckpoint(page: Page, id: number) {
     const content = await page.content();
-    fs.writeFileSync(path.join(__dirname, 'DOMCheckpoints', `out${id}`), content);
+    fs.writeFileSync(
+      path.join(__dirname, 'DOMCheckpoints', `out${id}`),
+      content
+    );
   }
 
   private async search(
-    browser: Browser,
+    page: Page,
     selectors: IFormConfiguration,
     baseURL: URL,
     needStyle: boolean
   ) {
-    const page = await browser.newPage();
+    // const page = await browser.newPage();
 
     //turns request interceptor on
     await page.setRequestInterception(true);
 
     //if the page makes a  request to a resource type of image or stylesheet then abort that request
     page.on('request', (request) => {
-      if (request.resourceType() === 'image') {
+      if (request.resourceType() === 'image' || request.resourceType() === 'font') {
         request.abort();
       } else if (request.resourceType() === 'stylesheet') {
         if (needStyle) {
@@ -135,6 +142,7 @@ class LocationDecoder {
 
     await page.setDefaultNavigationTimeout(0);
     const { searchButtonSelector, searchInputSelector } = selectors;
+    
 
     await page.goto(baseURL.href, {
       waitUntil: 'domcontentloaded',
@@ -143,7 +151,7 @@ class LocationDecoder {
     await this.delay(700);
 
     if (selectors.acceptCookiesSelector) {
-      this.acceptCookies(page, selectors.acceptCookiesSelector);
+      await this.acceptCookies(page, selectors.acceptCookiesSelector);
     }
 
     await this.delay(700);
@@ -169,8 +177,6 @@ class LocationDecoder {
 
     await this.delay(200);
 
-    await this.DOMCheckpoint(page, 1);
-
     if (selectors.extraStep) {
       await this.click(page, selectors.extraStep);
     }
@@ -178,8 +184,8 @@ class LocationDecoder {
     await this.delay(500);
 
     await Promise.all([
-      await this.click(page, searchButtonSelector),
-      await page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      this.click(page, searchButtonSelector),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
     ]);
 
     const url = new URL(page.url());
@@ -188,7 +194,11 @@ class LocationDecoder {
     return url;
   }
 
-  public async getOneUrl(url: URL, selectors: IFormConfiguration, needStyle: boolean) {
+  public async getOneUrl(
+    url: URL,
+    selectors: IFormConfiguration,
+    needStyle: boolean
+  ) {
     const browser = await puppeteer.launch({
       args: minimal_args,
       headless: false,
@@ -198,7 +208,9 @@ class LocationDecoder {
       defaultViewport: { width: 1920, height: 1080 },
     });
 
-    const rawUrl = await this.search(browser, selectors, url, needStyle);
+    const page = await browser.newPage();
+
+    const rawUrl = await this.search(page, selectors, url, needStyle);
 
     console.log(rawUrl);
 
@@ -206,23 +218,60 @@ class LocationDecoder {
   }
 
   public async getAllUrls() {
-    const urls: Promise<URL>[] = [];
+    const urls: URL[] = [];
 
-    const browser = await puppeteer.launch({
-      args: minimal_args,
-      headless: false,
-      userDataDir: path.join(__dirname, './userCache'),
-      ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
-      slowMo: 10,
-      defaultViewport: { width: 1920, height: 1080 },
+    const cluster = await Cluster.launch({
+      puppeteer,
+      concurrency: Cluster.CONCURRENCY_CONTEXT,
+      // timeout: 100000,
+      maxConcurrency: 4,
+      puppeteerOptions: {
+        args: minimal_args,
+        headless: true,
+        userDataDir: path.join(__dirname, './userCache'),
+        ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
+        // slowMo: 10,
+        defaultViewport: { width: 1920, height: 1080 },
+      },
+      monitor: true,
+      retryLimit: 1,
+    });
+
+    await cluster.task(async ({ page, data }) => {
+      const { formConfiguration, resolveCaptcha, url, needStyle } = data;
+
+      if (resolveCaptcha) {
+        // resolve captcha
+      }
+
+      urls.push(await this.search(page, formConfiguration, url, needStyle));
     });
 
     for (let i = 0; i < this.configurations.length; ++i) {
-      const { formConfiguration, url, needStyle } = this.configurations[i];
-      urls.push(this.search(browser, formConfiguration, url, needStyle));
+      await cluster.queue(this.configurations[i]);
     }
 
-    return Promise.all(urls);
+    cluster.on('taskerror', (err, data, willRetry) => {
+      if (willRetry) {
+        console.warn(
+          `Encountered an error while crawling ${data.url}. ${err.message}\nThis job will be retried`
+        );
+      } else {
+        console.error(`Failed to crawl ${data.url}: ${err.message}`);
+      }
+    });
+
+    await cluster.idle();
+    await cluster.close();
+
+    return urls;
+    // let page = await browser.newPage();
+
+    // const rawUrl = await this.search(page);
+
+    // console.log(rawUrl);
+
+    // browser.close();
   }
 }
 

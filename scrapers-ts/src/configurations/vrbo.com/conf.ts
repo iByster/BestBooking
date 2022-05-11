@@ -15,12 +15,13 @@ export const formConf: IFormConfiguration = {
     selectInputOption: {
       query: '#Typeahead__results > div > div:nth-child(1)',
       itemCount: 0,
-      
+      buttonVisible: true,
     },
 
     inputButtonSelector: {
       query: '#root > header > div.HeroImage > div.Jumbotron > div > div > div.StickyContainer.StickyContainer > div > div:nth-child(3) > form > div > div.search-form__field-wrapper.search-form__field-wrapper--destination > div > div > div.search-destination-input > div.search-destination-input__header.state--closed',
       itemCount: 0,
+      focusOn: false,
   }
 };
 
@@ -28,4 +29,5 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
     formConfiguration: formConf,
     url: new URL('https://www.vrbo.com/'),
     resolveCaptcha: false,
+    needStyle: false,
 }

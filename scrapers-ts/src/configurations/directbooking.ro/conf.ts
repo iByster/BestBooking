@@ -24,15 +24,15 @@ export const formConf: IFormConfiguration = {
     focusOn: true,
   },
 
-  extraStep: {
-    query: '#A2_v2',
-    itemCount: 0,
-  }
+  // extraStep: {
+  //   query: '#A2_v2',
+  //   itemCount: 0,
+  // }
 };
 
 export const locationDecoderConf: ILocationDecoderConfiguration = {
   formConfiguration: formConf,
   url: new URL('https://www.directbooking.ro/ro.aspx'),
   resolveCaptcha: false,
-  needStyle: false,
+  needStyle: true,
 };

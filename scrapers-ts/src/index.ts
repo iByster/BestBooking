@@ -14,29 +14,28 @@ const main = async () => {
   const configurations = [
     bookingComLocationDecoderConf,
     eskyRoLocationDecoderConf,
-    directBookingRoLocationDecoderConf,
+    // directBookingRoLocationDecoderConf,
     hotelsComLocationDecoderConf,
     agodaComLocationDecoderConf,
     vrboComLocationDecoderConf,
     allAccorComLocationDecoderConf,
     tripComLocationDecoderConf,
-    // expediaComLocationDecoderConf
   ]
 
   const ld = new LocationDecoder(
     configurations,
-    'Bucuresti',
+    'Berlin',
   )
 
-  ld.getOneUrl(
-    hotelsComLocationDecoderConf.url,
-    hotelsComLocationDecoderConf.formConfiguration,
-    hotelsComLocationDecoderConf.needStyle
-  );
+  // ld.getOneUrl(
+  //   directBookingRoLocationDecoderConf.url,
+  //   directBookingRoLocationDecoderConf.formConfiguration,
+  //   directBookingRoLocationDecoderConf.needStyle
+  // );
 
-  // console.time('Timer');
-  // console.log(await ld.getAllUrls());
-  // console.timeEnd('Timer');
+  console.time('Timer');
+  console.log(await ld.getAllUrls());
+  console.timeEnd('Timer');
 };
 
 main().catch((e) => console.log(e));

@@ -24,7 +24,9 @@ export const formConf: IFormConfiguration = {
     },
 
     inputButtonSelector: {
-      query: 'body > hot-app > ng-component > div > div > esky-search-form > esky-oneway-roundtrip-form > form > section > fieldset.trip-destinations > div > esky-popular-places > span > esky-new-autocomplete-input > div > div > input',
+      // query: 'body > hot-app > ng-component > div > div > esky-search-form > esky-oneway-roundtrip-form > form > section > fieldset.trip-destinations > div > esky-popular-places > span > esky-new-autocomplete-input > div > div > input',
+      // query: 'body > hot-app > ng-component > div > div > esky-search-form > esky-oneway-roundtrip-form > form > section > fieldset.trip-destinations > div > esky-popular-places > span > esky-new-autocomplete-input',
+      query: 'body > hot-app > ng-component > div > div > esky-search-form > esky-oneway-roundtrip-form > form > section > fieldset.trip-destinations > div > esky-popular-places > span > esky-new-autocomplete-input > div > div',
       itemCount: 0,
       focusOn: false,
   }
