@@ -1,6 +1,5 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import Adblocker from 'puppeteer-extra-plugin-adblocker'
 import path from 'path';
 import { minimal_args } from './puppeteerGunArgs';
 const ac = require('@antiadmin/anticaptchaofficial');
@@ -12,9 +11,8 @@ import {
   IButtonSelector,
   IInputSelector,
 } from '../types';
-import { Browser, Page } from 'puppeteer';
+import { Page } from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
-// import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha';
 
 class LocationDecoder {
   private configurations: ILocationDecoderConfiguration[];
@@ -26,10 +24,7 @@ class LocationDecoder {
   ) {
     this.configurations = configurations;
     this.locationName = locationName;
-    puppeteer.use(StealthPlugin());
-    // puppeteer.use(Adblocker({
-    //   blockTrackers: true, // default: false
-    // }));
+    puppeteer.use(StealthPlugin())
   }
 
   private async click(
@@ -120,12 +115,9 @@ class LocationDecoder {
     baseURL: URL,
     needStyle: boolean
   ) {
-    // const page = await browser.newPage();
 
-    //turns request interceptor on
     await page.setRequestInterception(true);
 
-    //if the page makes a  request to a resource type of image or stylesheet then abort that request
     page.on('request', (request) => {
       if (request.resourceType() === 'image' || request.resourceType() === 'font') {
         request.abort();
@@ -148,13 +140,13 @@ class LocationDecoder {
       waitUntil: 'domcontentloaded',
     });
 
-    await this.delay(700);
+    await this.delay(400);
 
     if (selectors.acceptCookiesSelector) {
       await this.acceptCookies(page, selectors.acceptCookiesSelector);
     }
 
-    await this.delay(700);
+    await this.delay(400);
 
     if (selectors.inputButtonSelector) {
       await this.click(page, selectors.inputButtonSelector);
@@ -169,7 +161,7 @@ class LocationDecoder {
       delay: 150,
     });
 
-    await this.delay(1000);
+    await this.delay(500);
 
     if (selectors.selectInputOption) {
       await this.click(page, selectors.selectInputOption);
@@ -204,7 +196,6 @@ class LocationDecoder {
       headless: false,
       userDataDir: path.join(__dirname, './userCache'),
       ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
-      // slowMo: 10,
       defaultViewport: { width: 1920, height: 1080 },
     });
 
@@ -223,14 +214,12 @@ class LocationDecoder {
     const cluster = await Cluster.launch({
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
-      // timeout: 100000,
       maxConcurrency: 4,
       puppeteerOptions: {
         args: minimal_args,
         headless: true,
         userDataDir: path.join(__dirname, './userCache'),
         ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
-        // slowMo: 10,
         defaultViewport: { width: 1920, height: 1080 },
       },
       monitor: true,
@@ -244,7 +233,9 @@ class LocationDecoder {
         // resolve captcha
       }
 
-      urls.push(await this.search(page, formConfiguration, url, needStyle));
+      const urlDecoded = await this.search(page, formConfiguration, url, needStyle)
+      console.log(urlDecoded);
+      urls.push(urlDecoded);
     });
 
     for (let i = 0; i < this.configurations.length; ++i) {
@@ -265,13 +256,6 @@ class LocationDecoder {
     await cluster.close();
 
     return urls;
-    // let page = await browser.newPage();
-
-    // const rawUrl = await this.search(page);
-
-    // console.log(rawUrl);
-
-    // browser.close();
   }
 }
 
