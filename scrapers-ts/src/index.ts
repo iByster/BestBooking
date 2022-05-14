@@ -5,7 +5,7 @@ import {
 } from './configurations/booking.com/conf';
 import { locationDecoderConf as eskyRoLocationDecoderConf, buildURL as eskyRoBuildURL, } from './configurations/esky.ro/conf';
 // import { locationDecoderConf as directBookingRoLocationDecoderConf } from './configurations/directbooking.ro/conf';
-import { locationDecoderConf as hotelsComLocationDecoderConf } from './configurations/hotels.com/conf';
+import { locationDecoderConf as hotelsComLocationDecoderConf, buildURL as hotelsComBuildURL } from './configurations/hotels.com/conf';
 import { locationDecoderConf as tripComLocationDecoderConf } from './configurations/trip.com/conf';
 import {
   locationDecoderConf as agodaComLocationDecoderConf,
@@ -58,24 +58,25 @@ const main = async () => {
   // const url = new URL(
   //   'https://www.booking.com/searchresults.html?ss=Baile+Felix&ssne=Baile+Felix&ssne_untouched=Baile+Felix&label=gen173nr-1FCAEoggI46AdIM1gEaMABiAEBmAExuAEXyAEM2AEB6AEB-AECiAIBqAIDuALd_u-TBsACAdICJGE3ZjFkZmIyLWJiOWItNGMwYi04MDBkLTcyZTcwYTE2Nzk1M9gCBeACAQ&sid=707ada3d0c749f426fff27b059cbca16&aid=304142&lang=en-us&sb=1&src_elem=sb&src=searchresults&dest_id=900040016&dest_type=city&checkin=2022-05-14&checkout=2022-05-17&group_adults=2&no_rooms=1&group_children=3&age=7&age=4&age=1&sb_travel_purpose=leisure'
   // );
-  const url = new URL('https://www.esky.ro/cazare/search?arrivalLat=46.3692&arrivalLon=25.8096&arrivalCode=35961&arrivalType=city&rangeStartDate=2022-05-12&rangeEndDate=2022-05-12&isFlexSearch=false&stayLength=2,2&rooms[0][adults]=2&rooms[0][childrenAges]=4,3&rooms[1][adults]=2&rooms[1][childrenAges]=4,1,2&source=QSF&token=70a2164f-ee53-4ecc-aa1c-2385c88ad979');
+  // const url = new URL('https://www.esky.ro/cazare/search?arrivalLat=46.3692&arrivalLon=25.8096&arrivalCode=35961&arrivalType=city&rangeStartDate=2022-05-12&rangeEndDate=2022-05-12&isFlexSearch=false&stayLength=2,2&rooms[0][adults]=2&rooms[0][childrenAges]=4,3&rooms[1][adults]=2&rooms[1][childrenAges]=4,1,2&source=QSF&token=70a2164f-ee53-4ecc-aa1c-2385c88ad979');
+  const url = new URL('https://www.hotels.com/Hotel-Search?adults=2%2C3&children=1_7%2C1_4%2C2_13%2C2_12&d1=2022-05-25&d2=2022-05-26&destination=New%20York%2C%20New%20York%2C%20United%20States%20of%20America&directFlights=false&endDate=2022-06-17&hotels-destination=New%20York&hotels-destination=Baile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania&latLong=40.75668%2C-73.98647&localDateFormat=dd%2FMM%2Fy&partialStay=false&regionId=2621&semdtl=&sort=RECOMMENDED&startDate=2022-06-13&theme=&useRewards=false&userIntent=');
 
   console.log(url);
-  // const url =
+
   const ld = new LocationDecoder(
     configurations,
     'Berlin',
   )
 
   const ldURL = await ld.getOneUrl(
-    eskyRoLocationDecoderConf.url,
-    eskyRoLocationDecoderConf.formConfiguration,
-    eskyRoLocationDecoderConf.needStyle
+    hotelsComLocationDecoderConf.url,
+    hotelsComLocationDecoderConf.formConfiguration,
+    hotelsComLocationDecoderConf.needStyle
   );
 
   console.log(ldURL);
 
-  const builtURL = eskyRoBuildURL(useInput, ldURL);
+  const builtURL = hotelsComBuildURL(useInput, ldURL);
   console.log(builtURL);
 
   // const builtUrl = await buildUrlForScrape(

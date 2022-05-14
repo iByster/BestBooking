@@ -1,4 +1,4 @@
-import { IFormConfiguration, ILocationDecoderConfiguration } from '../../types';
+import { IFormConfiguration, ILocationDecoderConfiguration, IUserInput } from '../../types';
 
 export const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -33,3 +33,26 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
   resolveCaptcha: false,
   needStyle: false,
 };
+
+export const buildURL = (userInput: IUserInput, locationDecoderURL: URL) => {
+  const { checkIn, checkOut, rooms } = userInput;
+  const adults = rooms.map((b) => b.adults).join();
+  const children: string[] = [];
+  rooms.forEach((r, i) => {
+    return r.childAges.forEach(ca => {
+      children.push(`${i+1}_${ca}`);
+    });
+  });
+  locationDecoderURL.searchParams.set('startDate', parseDate(checkIn));
+  locationDecoderURL.searchParams.set('endDate', parseDate(checkOut));
+  locationDecoderURL.searchParams.set('rooms', rooms.length.toString());
+  locationDecoderURL.searchParams.set('adults', adults);
+  locationDecoderURL.searchParams.set('children', children.join());
+  
+  return locationDecoderURL;
+};
+
+export const parseDate = (date: Date) => {
+  return date.toISOString().split('T')[0];
+};
+
