@@ -1,4 +1,4 @@
-import { IFormConfiguration, ILocationDecoderConfiguration } from "../../types";
+import { IFormConfiguration, ILocationDecoderConfiguration, ISearchQueryParameters, ISearchQueryParametersAux, IUserInput } from "../../types";
 
 export const formConf: IFormConfiguration = {
     searchInputSelector: {
@@ -32,3 +32,43 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
   resolveCaptcha: false,
   needStyle: false,
 }
+
+export const searchQueryParamsMap: ISearchQueryParameters = {
+  // varsta copii
+  checkIn: 'checkin',
+  checkOut: 'checkout',
+  adults: 'group_adults',
+  children: 'group_children',
+  rooms: 'no_rooms',
+};
+
+export const buildURL = (userInput: IUserInput, locationDecoderURL: URL) => {
+  const { checkIn, checkOut, rooms } = userInput;
+  const adults = rooms.reduce((a, b) => a + b.adults, 0);
+  const children = rooms.reduce((a, b) => a + b.childAges.length, 0);
+  const childAges = rooms.map(r => {
+    return r.childAges;
+  }).flat();
+  locationDecoderURL.searchParams.set('checkin', parseDate(checkIn));
+  locationDecoderURL.searchParams.set('checkout', parseDate(checkOut));
+  locationDecoderURL.searchParams.set('no_rooms', rooms.length.toString());
+  locationDecoderURL.searchParams.set('group_adults', adults.toString());
+  locationDecoderURL.searchParams.set('group_children', children.toString());
+  locationDecoderURL.searchParams.delete('age');
+  for (let i = 0; i < childAges.length; ++i) {
+    locationDecoderURL.searchParams.append(
+      'age',
+      childAges[i].toString()
+    );
+  }
+  
+  return locationDecoderURL;
+};
+
+export const searchQueryParametersAux: ISearchQueryParametersAux = {
+  priceCurrency: 'EUR',
+};
+
+export const parseDate = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};

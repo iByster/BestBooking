@@ -1,45 +1,26 @@
-// const jsdom = require('jsdom');
-// const { JSDOM } = jsdom;
-// const got = require('got');
-// const buildURL = require('../../buildURL');
-// const getContentByType = require('../../getContentByType');
-// const { parentPort, workerData, isMainThread } = require('worker_threads');
+import jsdom, { JSDOM } from 'jsdom';
+import got from 'got';
+import { WorkerPayload } from '../types';
+const { parentPort, isMainThread } = require('worker_threads');
 
-// const main = async (data) => {
-//   if (isMainThread) {
-//     throw new Error('Its not a worker');
-//   }
+const main = async (url: string) => {
+  if (isMainThread) {
+    throw new Error('Its not a worker');
+  }
 
-//   const { locationDecoder } = workerData;
-//   const { defaultQuery, url, route, locationSelector } = locationDecoder;
-//   const { invalidCodeValue, query, itemCount, getType } = locationSelector;
-//   let finished = false;
+  const virtualConsole = new jsdom.VirtualConsole();
 
-//   const virtualConsole = new jsdom.VirtualConsole();
+  const response = await got(url);
 
-//   // console.log(`ITERATION: ${data.i}.`);
+  const dom = new JSDOM(response.body, { virtualConsole });
 
-//   const urlQueryObject = {
-//     ...defaultQuery.args,
-//     [defaultQuery.id]: data.i,
-//   };
+  const node = dom.window.document.title;
 
-//   const urlSafe = buildURL(url, route, urlQueryObject);
-//   // console.log(urlSafe);
-//   const response = await got(urlSafe);
+  parentPort.postMessage({ title: node });
+};
 
-//   const dom = new JSDOM(response.body, { virtualConsole });
-
-//   const node = dom.window.document.querySelectorAll(query)[itemCount];
-//   const locationName = getContentByType(getType, node);
-
-//   if (invalidCodeValue === locationName) {
-//     finished = true;
-//   }
-
-//   parentPort.postMessage({ locationName, id: data.i });
-// };
-
-// parentPort.on('message', (data) => {
-//   main(data);
-// });
+parentPort.on('message', (data: WorkerPayload) => {
+  console.log(data);
+  const { url } = data;
+  main(url);
+});

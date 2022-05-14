@@ -38,7 +38,9 @@ export class WorkerPool<T, N> {
           return resolve(result!);
         },
       };
+      // console.log('PARAMETER', getData());
       if (availableWorkerId === -1) {
+        // console.log(queueItem.getData());
         this.queue.push(queueItem);
         return null;
       }
@@ -83,6 +85,8 @@ export class WorkerPool<T, N> {
     };
     worker.once('message', messageCallback);
     worker.once('error', errorCallback);
-    worker.postMessage(await queueItem.getData());
+    const data = await queueItem.getData();
+    console.log("DATAAA", data);
+    worker.postMessage(data);
   }
 }

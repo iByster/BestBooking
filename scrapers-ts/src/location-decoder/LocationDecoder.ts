@@ -3,7 +3,6 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import path from 'path';
 import { minimal_args } from './puppeteerGunArgs';
 const ac = require('@antiadmin/anticaptchaofficial');
-import fs from 'fs';
 import {
   IFormConfiguration,
   IGeneralSelector,
@@ -101,13 +100,13 @@ class LocationDecoder {
     await page.keyboard.press('Backspace');
   }
 
-  private async DOMCheckpoint(page: Page, id: number) {
-    const content = await page.content();
-    fs.writeFileSync(
-      path.join(__dirname, 'DOMCheckpoints', `out${id}`),
-      content
-    );
-  }
+  // private async DOMCheckpoint(page: Page, id: number) {
+  //   const content = await page.content();
+  //   fs.writeFileSync(
+  //     path.join(__dirname, 'DOMCheckpoints', `out${id}`),
+  //     content
+  //   );
+  // }
 
   private async search(
     page: Page,
@@ -193,7 +192,7 @@ class LocationDecoder {
   ) {
     const browser = await puppeteer.launch({
       args: minimal_args,
-      headless: false,
+      headless: true,
       userDataDir: path.join(__dirname, './userCache'),
       ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
       defaultViewport: { width: 1920, height: 1080 },
@@ -203,9 +202,9 @@ class LocationDecoder {
 
     const rawUrl = await this.search(page, selectors, url, needStyle);
 
-    console.log(rawUrl);
-
     browser.close();
+
+    return new URL(rawUrl);
   }
 
   public async getAllUrls() {
@@ -230,11 +229,11 @@ class LocationDecoder {
       const { formConfiguration, resolveCaptcha, url, needStyle } = data;
 
       if (resolveCaptcha) {
-        // resolve captcha
+        this.solveCaptcha(page, url);
       }
 
       const urlDecoded = await this.search(page, formConfiguration, url, needStyle)
-      console.log(urlDecoded);
+      // console.log(urlDecoded);
       urls.push(urlDecoded);
     });
 

@@ -38,6 +38,9 @@ Thumbs.db
 dist/**/*
 /dist
 
+src/location-decoder/userCache/
+userCache
+
 # ignore yarn.lock
 yarn.lock
 
