@@ -48,7 +48,7 @@ class LocationDecoder {
   private async acceptCookies(page: Page, acceptCookies: IGeneralSelector) {
     try {
       if (acceptCookies) {
-        await page.waitForSelector(acceptCookies.query);
+        await page.waitForSelector(acceptCookies.query, { timeout: 10000 });
         await page.click(acceptCookies.query);
       }
     } catch (e) {

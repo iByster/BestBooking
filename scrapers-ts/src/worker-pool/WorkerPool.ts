@@ -86,7 +86,6 @@ export class WorkerPool<T, N> {
     worker.once('message', messageCallback);
     worker.once('error', errorCallback);
     const data = await queueItem.getData();
-    console.log("DATAAA", data);
     worker.postMessage(data);
   }
 }

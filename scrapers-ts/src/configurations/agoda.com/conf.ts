@@ -1,10 +1,107 @@
 import {
   IFormConfiguration,
   ILocationDecoderConfiguration,
-  ISearchQueryParameters,
-  ISearchQueryParametersAux,
+  IScraperConfiguration,
   IUserInput,
 } from '../../types';
+
+// : IScraperConfiguration
+export const scraperConf: IScraperConfiguration = {
+  url: 'https://www.agoda.com',
+
+  workerType: 'Puppeteer',
+
+  pageItemCount: 56,
+
+  containerSelector: (containerNumber: number) => {
+    return {
+      query: `#contentContainer > div:nth-child(${containerNumber}) > ol`,
+      itemCount: 0,
+    };
+  },
+
+  itemSelector: (itemNumber: number) => {
+    return {
+      query: `li:nth-child(${itemNumber})`,
+      itemCount: 0,
+    };
+  },
+
+  priceSelector: {
+    selector: {
+      query: 'span.PropertyCardPrice__Value',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  startsSelect: {
+    selector: {
+      query: '[data-selenium="hotel-star-rating]',
+      itemCount: 0,
+    },
+    type: 'title',
+    extract: (res: string) => {
+      return res.split(' ')[0];
+    },
+  },
+
+  currencySelector: {
+    selector: {
+      query: 'span.PropertyCardPrice__Currency',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  locationNameSelector: {
+    selector: {
+      query: 'h3',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  linkToHotelSelector: {
+    selector: {
+      query: 'a',
+      itemCount: 0,
+    },
+    type: 'link',
+  },
+
+  distanceSelector: {
+    selector: {
+      query: '',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  guestsSelector: {
+    selector: {
+      query: '',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  nightsSelector: {
+    selector: {
+      query: '',
+      itemCount: 0,
+    },
+    type: 'text',
+  },
+
+  ratingSelector: {
+    selector: {
+      query: '',
+      itemCount: 0,
+    },
+    type: 'text',
+  }
+};
 
 const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -48,20 +145,11 @@ export const locationDecoderConf: ILocationDecoderConfiguration = {
   needStyle: true,
 };
 
-export const searchQueryParamsMap: ISearchQueryParameters = {
-  // varsta copii
-  checkIn: 'checkIn',
-  checkOut: 'checkOut',
-  adults: 'adults',
-  children: 'children',
-  rooms: 'rooms',
-};
-
 export const buildURL = (userInput: IUserInput, locationDecoderURL: URL) => {
   const { checkIn, checkOut, rooms } = userInput;
   const adults = rooms.reduce((a, b) => a + b.adults, 0);
   const children = rooms.reduce((a, b) => a + b.childAges.length, 0);
-  const childAges = rooms.map(r => {
+  const childAges = rooms.map((r) => {
     return r.childAges;
   });
 
@@ -70,16 +158,9 @@ export const buildURL = (userInput: IUserInput, locationDecoderURL: URL) => {
   locationDecoderURL.searchParams.set('rooms', rooms.length.toString());
   locationDecoderURL.searchParams.set('adults', adults.toString());
   locationDecoderURL.searchParams.set('children', children.toString());
-  locationDecoderURL.searchParams.set(
-    'childages',
-    String(childAges.flat()),
-  );
+  locationDecoderURL.searchParams.set('childages', String(childAges.flat()));
 
   return locationDecoderURL;
-};
-
-export const searchQueryParametersAux: ISearchQueryParametersAux = {
-  priceCurrency: 'EUR',
 };
 
 export const parseDate = (date: Date) => {

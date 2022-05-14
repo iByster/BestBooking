@@ -35,13 +35,38 @@ export interface WorkerPayload {
   url: string;
 }
 
-export interface WorkerResponse {
-  title: string;
+export interface WorkerResponse extends IHotelInfomartion {
 }
 
 interface IRoom {
   adults: number,
   childAges: number[];
+}
+
+type ExtractType = 'text' | 'link' | 'title';
+export type WorkerType = 'DomJS' | 'Puppeteer';
+
+export interface IScraperSelector {
+  selector: IGeneralSelector;
+  type: ExtractType;
+  extract?(res: string): string; 
+}
+
+export interface IScraperConfiguration {
+  url: string;
+  workerType: WorkerType;
+  pageItemCount: number;
+  containerSelector(containerNumber: number): IGeneralSelector;
+  itemSelector(itemNumber: number): IGeneralSelector;
+  priceSelector: IScraperSelector;
+  startsSelect: IScraperSelector;
+  currencySelector: IScraperSelector;
+  locationNameSelector: IScraperSelector;
+  linkToHotelSelector: IScraperSelector;
+  ratingSelector: IScraperSelector;
+  distanceSelector: IScraperSelector;
+  guestsSelector: IScraperSelector;
+  nightsSelector: IScraperSelector;
 }
 
 export interface IUserInput {
@@ -69,4 +94,21 @@ export interface ISearchQueryParametersAux {
 export interface QueueItem<T, N> {
   callback: QueueCallback<N>;
   getData: () => T;
+}
+
+interface IBonusHotelInformation {
+  breakfastIncluded: boolean;
+}
+export interface IHotelInfomartion {
+  linkToHotel: URL;
+  hotelName: string;
+  locationName: string;
+  price: number;
+  currency: string;
+  rating: number;
+  starts: number;
+  distanceFromLocation?: number;
+  guests?: number;
+  nights?: number;
+  bonus?: IBonusHotelInformation;
 }
