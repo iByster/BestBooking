@@ -1,4 +1,5 @@
 import { JSONObject } from 'puppeteer';
+import { Hotel } from './entities/Hotel';
 
 export interface ILocationDecoderConfiguration {
   url: URL;
@@ -29,44 +30,68 @@ export interface IGeneralSelector extends JSONObject {
   itemCount: number;
 }
 
-export type QueueCallback<N> = (err: any, result?: N) => void;
+export type ExtractType = 'text' | 'link' | 'title' | 'list';
+export type WorkerType = 'DomJS' | 'Puppeteer' | 'RequestGraphQL' | 'RequestREST';
 
-export interface WorkerPayload {
-  url: string;
-}
-
-export interface WorkerResponse extends IHotelInfomartion {
-}
-
-interface IRoom {
-  adults: number,
-  childAges: number[];
-}
-
-type ExtractType = 'text' | 'link' | 'title';
-export type WorkerType = 'DomJS' | 'Puppeteer';
-
-export interface IScraperSelector {
+export interface IScraperSelector extends JSONObject {
   selector: IGeneralSelector;
   type: ExtractType;
-  extract?(res: string): string; 
+  // extract?(res: string): string;
+}
+
+export interface IScrapeSelectors  {
+  containerSelector?: IScraperSelector;
+  itemSelector?: IScraperSelector;
+  priceSelector?: IScraperSelector;
+  imageSelector?: IScraperSelector;
+  startsSelect?: IScraperSelector;
+  currencySelector?: IScraperSelector;
+  locationNameSelector?: IScraperSelector;
+  linkToHotelSelector?: IScraperSelector;
+  ratingSelector?: IScraperSelector;
+  distanceSelector?: IScraperSelector;
+  guestsSelector?: IScraperSelector;
+  nightsSelector?: IScraperSelector;
+  showMoreSelector?: IScraperSelector; 
+  noElementsSelector?: IScraperSelector; 
 }
 
 export interface IScraperConfiguration {
   url: string;
   workerType: WorkerType;
   pageItemCount: number;
-  containerSelector(containerNumber: number): IGeneralSelector;
-  itemSelector(itemNumber: number): IGeneralSelector;
-  priceSelector: IScraperSelector;
-  startsSelect: IScraperSelector;
-  currencySelector: IScraperSelector;
-  locationNameSelector: IScraperSelector;
-  linkToHotelSelector: IScraperSelector;
-  ratingSelector: IScraperSelector;
-  distanceSelector: IScraperSelector;
-  guestsSelector: IScraperSelector;
-  nightsSelector: IScraperSelector;
+  infiniteScroll: boolean;
+  virtualization: boolean;
+  pagination: boolean;
+  ssr: boolean;
+  decodedURLQueryParams: boolean;
+  payload: boolean;
+  query: boolean;
+  initialPaginationValue: number;
+  needStyle?: boolean;
+  scrapeSelectors?: IScrapeSelectors;
+}
+
+export interface IGraphQLScraperConfiguration extends IScraperConfiguration {
+
+}
+
+export interface IRESTScraperConfiguration extends IScraperConfiguration {
+  ssr: boolean;
+  decodedURLQueryParams: boolean;
+}
+
+export interface IPuppeterScraperConfiguration extends IScraperConfiguration {
+
+}
+
+export interface IJSDomScraperConfiguration extends IScraperConfiguration {
+
+}
+
+export interface IRoom {
+  adults: number;
+  childAges: number[];
 }
 
 export interface IUserInput {
@@ -77,7 +102,7 @@ export interface IUserInput {
 }
 
 export interface ISearchQueryParameters {
-//   locationName: string;
+  //   locationName: string;
   checkIn: string;
   checkOut: string;
   adults: string;
@@ -89,6 +114,19 @@ export interface ISearchQueryParametersAux {
   priceCurrency: string;
   lat?: string;
   lon?: string;
+}
+
+export type QueueCallback<N> = (err: any, result?: N) => void;
+
+export interface WorkerPayload {
+  decodedURL: string;
+  origin: string;
+  userInput: IUserInput;
+  initialPage?: number;
+}
+
+export interface WorkerResponse {
+  payload: Hotel[];
 }
 
 export interface QueueItem<T, N> {
@@ -107,6 +145,7 @@ export interface IHotelInfomartion {
   currency: string;
   rating: number;
   starts: number;
+  image: string;
   distanceFromLocation?: number;
   guests?: number;
   nights?: number;

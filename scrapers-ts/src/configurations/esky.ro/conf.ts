@@ -26,7 +26,7 @@ export const formConf: IFormConfiguration = {
 
   acceptCookiesSelector: {
     query:
-      '#qc-cmp2-ui > div.qc-cmp2-footer.qc-cmp2-footer-overlay > div > button.css-47sehv',
+      '#qc-cmp2-ui > div.qc-cmp2-footer.qc-cmp2-footer-overlay > div > button:nth-child(1) > span',
     itemCount: 0,
   },
 
@@ -54,19 +54,22 @@ export const buildURL = (userInput: IUserInput, locationDecoderURL: URL) => {
   locationDecoderURL.searchParams.set('rangeEndDate', parseDate(checkOut));
   locationDecoderURL.searchParams.set('no_rooms', rooms.length.toString());
   rooms.forEach((r, i) => {
-    locationDecoderURL.searchParams.set(`rooms[${i}][adults]`, r.adults.toString());
-    locationDecoderURL.searchParams.set(`rooms[${i}][childrenAges]`, r.childAges.join());
+    locationDecoderURL.searchParams.set(
+      `rooms[${i}][adults]`,
+      r.adults.toString()
+    );
+    locationDecoderURL.searchParams.set(
+      `rooms[${i}][childrenAges]`,
+      r.childAges.join()
+    );
   });
   const nights = Math.ceil(
     Math.abs(checkOut.getTime() - checkIn.getTime()) / (1000 * 3600 * 24)
-  )
+  );
 
   const nightsFormat = Array(rooms.length).fill(nights);
 
-  locationDecoderURL.searchParams.set(
-    'stayLength',
-    nightsFormat.join(),
-  );
+  locationDecoderURL.searchParams.set('stayLength', nightsFormat.join());
 
   return locationDecoderURL;
 };

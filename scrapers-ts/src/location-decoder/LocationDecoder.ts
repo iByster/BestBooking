@@ -12,6 +12,7 @@ import {
 } from '../types';
 import { Page } from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
+import { LocationDecoderURL } from '../entities/LocationDecoderURL';
 
 class LocationDecoder {
   private configurations: ILocationDecoderConfiguration[];
@@ -23,7 +24,7 @@ class LocationDecoder {
   ) {
     this.configurations = configurations;
     this.locationName = locationName;
-    puppeteer.use(StealthPlugin())
+    puppeteer.use(StealthPlugin());
   }
 
   private async click(
@@ -114,11 +115,13 @@ class LocationDecoder {
     baseURL: URL,
     needStyle: boolean
   ) {
-
     await page.setRequestInterception(true);
 
     page.on('request', (request) => {
-      if (request.resourceType() === 'image' || request.resourceType() === 'font') {
+      if (
+        request.resourceType() === 'image' ||
+        request.resourceType() === 'font'
+      ) {
         request.abort();
       } else if (request.resourceType() === 'stylesheet') {
         if (needStyle) {
@@ -133,7 +136,6 @@ class LocationDecoder {
 
     await page.setDefaultNavigationTimeout(0);
     const { searchButtonSelector, searchInputSelector } = selectors;
-    
 
     await page.goto(baseURL.href, {
       waitUntil: 'domcontentloaded',
@@ -192,7 +194,7 @@ class LocationDecoder {
   ) {
     const browser = await puppeteer.launch({
       args: minimal_args,
-      headless: true,
+      headless: false,
       userDataDir: path.join(__dirname, './userCache'),
       ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
       defaultViewport: { width: 1920, height: 1080 },
@@ -216,7 +218,7 @@ class LocationDecoder {
       maxConcurrency: 4,
       puppeteerOptions: {
         args: minimal_args,
-        headless: true,
+        headless: false,
         userDataDir: path.join(__dirname, './userCache'),
         ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
         defaultViewport: { width: 1920, height: 1080 },
@@ -226,14 +228,24 @@ class LocationDecoder {
     });
 
     await cluster.task(async ({ page, data }) => {
-      const { formConfiguration, resolveCaptcha, url, needStyle } = data;
+      const { formConfiguration, resolveCaptcha, url, needStyle } = data as ILocationDecoderConfiguration;
 
       if (resolveCaptcha) {
         this.solveCaptcha(page, url);
       }
 
-      const urlDecoded = await this.search(page, formConfiguration, url, needStyle)
-      // console.log(urlDecoded);
+      const urlDecoded = await this.search(
+        page,
+        formConfiguration,
+        url,
+        needStyle
+      );
+
+      LocationDecoderURL.create({
+        extractedURL: urlDecoded.href,
+        locationName: this.locationName,
+        siteOrigin: urlDecoded.origin,
+      }).save();
       urls.push(urlDecoded);
     });
 

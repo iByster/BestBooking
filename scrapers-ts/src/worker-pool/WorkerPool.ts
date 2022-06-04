@@ -22,8 +22,6 @@ export class WorkerPool<T, N> {
       this.workersById[i] = worker;
       this.activeWorkersById[i] = false;
     }
-
-    return;
   }
 
   public run(getData: () => T) {
@@ -45,7 +43,6 @@ export class WorkerPool<T, N> {
         return null;
       }
       this.runWorker(availableWorkerId, queueItem);
-      return;
     });
   }
 
@@ -79,9 +76,8 @@ export class WorkerPool<T, N> {
       if (!this.queue.length) {
         return null;
       }
-
+      
       this.runWorker(workerId, this.queue.shift()!);
-      return;
     };
     worker.once('message', messageCallback);
     worker.once('error', errorCallback);

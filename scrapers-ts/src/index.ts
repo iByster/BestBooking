@@ -29,97 +29,70 @@ import {
   buildURL as allAccorComBuildURL,
 } from './configurations/all.accor.com/conf';
 import Scraper from './worker-pool/Scraper';
-import { IUserInput } from './types';
+import { ILocationDecoderConfiguration, IUserInput } from './types';
 import { buildUrlForScrape } from './utils/buildUrlForScrape';
+import DropPoint from './type-orm.config';
+import LocationDecoderURLService from './services/LocationDecoderURLService';
+import { calculateTotalPriceInRON } from './utils/parseUtils';
+import HotelService from './services/HotelService';
 
 const main = async () => {
+  await DropPoint.initialize();
+
   const configurations = [
-    bookingComLocationDecoderConf,
-    eskyRoLocationDecoderConf,
-    // directBookingRoLocationDecoderConf,
-    hotelsComLocationDecoderConf,
-    agodaComLocationDecoderConf,
-    // vrboComLocationDecoderConf,
-    allAccorComLocationDecoderConf,
+    // bookingComLocationDecoderConf,
+    // hotelsComLocationDecoderConf,
+    // agodaComLocationDecoderConf,
     tripComLocationDecoderConf,
+    // eskyRoLocationDecoderConf,
+    // directBookingRoLocationDecoderConf,
+    // vrboComLocationDecoderConf,
+    // allAccorComLocationDecoderConf,
   ];
 
-  const useInput: IUserInput = {
-    locationName: 'Miercurea-Ciuc',
-    checkIn: new Date(2022, 6, 13),
-    checkOut: new Date(2022, 6, 16),
+  const userInput: IUserInput = {
+    locationName: 'Brasov',
+    checkIn: new Date(2022, 7, 4),
+    checkOut: new Date(2022, 7, 8),
     rooms: [
       {
-        adults: 2,
-        childAges: [6, 7],
-      },
-      {
-        adults: 2,
-        childAges: [4, 8, 6],
+        adults: 1,
+        childAges: [2, 2],
       },
     ],
   };
 
-  // const url = new URL(
-  //   'https://all.accor.com/ssr/app/accor/hotels/new-york-ny-usa/index.en.shtml?dateIn=2022-05-19&nights=4&compositions=3-4-6,2-14&stayplus=false&snu=false&destination=new-york-ny-usa'
-  // );
-  const url = new URL(
-    'https://www.agoda.com/search?city=2366&locale=en-us&ckuid=5ed6e5cb-8f91-4e76-acef-2149898826d9&prid=0&currency=EUR&correlationId=965c11cc-84b8-4d0e-bf58-b011cb5cfd92&pageTypeId=103&realLanguageId=1&languageId=1&origin=RO&cid=-1&userId=5ed6e5cb-8f91-4e76-acef-2149898826d9&whitelabelid=1&loginLvl=0&storefrontId=3&currencyId=1&currencyCode=EUR&htmlLanguage=en-us&cultureInfoName=en-us&machineName=main-74ffdc4c78-bv5mt&trafficGroupId=4&sessionId=zwwpsbek0a5eqbu0z3vtr2vg&trafficSubGroupId=4&aid=130243&useFullPageLogin=true&cttp=4&isRealUser=true&mode=production&checkIn=2022-07-12&checkOut=2022-07-15&rooms=2&adults=4&children=5&childages=6%2C7%2C4%2C8%2C6&priceCur=EUR&los=3&textToSearch=Berlin&travellerType=2&familyMode=off&productType=-1'
-  );
-  // const url = new URL(
-  //   'https://www.booking.com/searchresults.html?ss=Baile+Felix&ssne=Baile+Felix&ssne_untouched=Baile+Felix&label=gen173nr-1FCAEoggI46AdIM1gEaMABiAEBmAExuAEXyAEM2AEB6AEB-AECiAIBqAIDuALd_u-TBsACAdICJGE3ZjFkZmIyLWJiOWItNGMwYi04MDBkLTcyZTcwYTE2Nzk1M9gCBeACAQ&sid=707ada3d0c749f426fff27b059cbca16&aid=304142&lang=en-us&sb=1&src_elem=sb&src=searchresults&dest_id=900040016&dest_type=city&checkin=2022-05-14&checkout=2022-05-17&group_adults=2&no_rooms=1&group_children=3&age=7&age=4&age=1&sb_travel_purpose=leisure'
-  // );
-  // const url = new URL('https://www.esky.ro/cazare/search?arrivalLat=46.3692&arrivalLon=25.8096&arrivalCode=35961&arrivalType=city&rangeStartDate=2022-05-12&rangeEndDate=2022-05-12&isFlexSearch=false&stayLength=2,2&rooms[0][adults]=2&rooms[0][childrenAges]=4,3&rooms[1][adults]=2&rooms[1][childrenAges]=4,1,2&source=QSF&token=70a2164f-ee53-4ecc-aa1c-2385c88ad979');
-  // const url = new URL('https://www.hotels.com/Hotel-Search?adults=2%2C3&children=1_7%2C1_4%2C2_13%2C2_12&d1=2022-05-25&d2=2022-05-26&destination=New%20York%2C%20New%20York%2C%20United%20States%20of%20America&directFlights=false&endDate=2022-06-17&hotels-destination=New%20York&hotels-destination=Baile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania%2CBaile%20Felix%2C%20Bihor%20County%2C%20Romania&latLong=40.75668%2C-73.98647&localDateFormat=dd%2FMM%2Fy&partialStay=false&regionId=2621&semdtl=&sort=RECOMMENDED&startDate=2022-06-13&theme=&useRewards=false&userIntent=');
-  // const url = new URL('https://www.vrbo.com/search/keywords:new-york-new-york-united-states-of-america/arrival:2022-05-11/departure:2022-05-14/minNightlyPrice/0/minTotalPrice/0?filterByTotalPrice=true&petIncluded=false&ssr=true&adultsCount=2&childrenCount=3');
+  const hotelService = new HotelService();
 
-  // console.log(url);
+  console.log(await hotelService.getHotelsByUserInput(userInput, {}));
 
-  const ld = new LocationDecoder(configurations, 'Berlin');
+  // const locationDecoderURLService = new LocationDecoderURLService();
 
-  const ldURL = await ld.getOneUrl(
-    agodaComLocationDecoderConf.url,
-    agodaComLocationDecoderConf.formConfiguration,
-    agodaComLocationDecoderConf.needStyle
-  );
+  // const decodedURLs: URL[] = [];
+  // const neededConf: ILocationDecoderConfiguration[] = [];
 
-  // console.log(ldURL);
+  // for (let i = 0; i < configurations.length; ++i) {
+  //   const res = await locationDecoderURLService.checkIfLocationIdStored(
+  //     // TODO should check if created_at is up-to-date
+  //     userInput.locationName,
+  //     configurations[i].url.origin
+  //   );
 
-  const builtURL = agodaComBuildURL(useInput, ldURL);
-  // console.log(builtURL);
-
-  const scraper = new Scraper([builtURL]);
-
-  await scraper.scrape();
-
-  // const builtUrl = await buildUrlForScrape(
-  //   useInput,
-  //   bookingComSearchQueryParamsMap,
-  //   url,
-  //   bookingComParseDate
-  // );
-
-  // for(let pair of url.searchParams.entries()) {
-  //   console.log(typeof pair[0]);
-  //   console.log(typeof pair[1]);
+  //   if (res) {
+  //     decodedURLs.push(new URL(res.extractedURL));
+  //   } else {
+  //     neededConf.push(configurations[i]);
+  //   }
   // }
 
-  // const mockURLS = [
-  //   new URL('https://www.trip.com/'),
-  //   new URL('https://www.agoda.com/'),
-  //   new URL('https://www.hotels.com/'),
-  //   new URL('https://www.vrbo.com/'),
-  //   new URL('https://www.directbooking.ro/ro.aspx'),
-  //   new URL('https://www.booking.com/'),
-  // ]
+  // if (neededConf.length > 0) {
+  //   const locationDecoder = new LocationDecoder(neededConf, userInput.locationName);
+  //   const extractedURLs = await locationDecoder.getAllUrls();
+  //   decodedURLs.push(...extractedURLs);
+  // }
 
-  // // const urls = await ld.getAllUrls();
-
-  // console.time('Timer');
-  // const titles = await scraper.scrape();
-  // console.timeEnd('Timer');
-
-  // console.log(titles);
+  // const scraper = new Scraper(userInput, decodedURLs);
+  // await scraper.scrape();
 };
 
 main().catch((e) => console.log(e));
