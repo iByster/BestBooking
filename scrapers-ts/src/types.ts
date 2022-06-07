@@ -1,5 +1,17 @@
 import { JSONObject } from 'puppeteer';
 import { Hotel } from './entities/Hotel';
+import { RequestConfiguration } from './entities/RequestConfiguration';
+import { Request, Response } from 'express';
+import { Session, SessionData } from 'express-session';
+
+export type MyContext = {
+    req: Request & {
+      session: Session & Partial<SessionData> & { userId?: number };
+    };
+    res: Response;
+    // redis: Redis;
+};
+
 
 export interface ILocationDecoderConfiguration {
   url: URL;
@@ -57,7 +69,7 @@ export interface IScrapeSelectors  {
 }
 
 export interface IScraperConfiguration {
-  url: string;
+  siteOrigin: string;
   workerType: WorkerType;
   pageItemCount: number;
   infiniteScroll: boolean;
@@ -68,7 +80,7 @@ export interface IScraperConfiguration {
   payload: boolean;
   query: boolean;
   initialPaginationValue: number;
-  needStyle?: boolean;
+  needStyle: boolean;
   scrapeSelectors?: IScrapeSelectors;
 }
 
@@ -122,11 +134,14 @@ export interface WorkerPayload {
   decodedURL: string;
   origin: string;
   userInput: IUserInput;
-  initialPage?: number;
+  scraperConf: IScraperConfiguration;
+  requestConfiguration: RequestConfiguration | null;
+  page?: number;
 }
 
 export interface WorkerResponse {
   payload: Hotel[];
+  isMore: boolean;
 }
 
 export interface QueueItem<T, N> {

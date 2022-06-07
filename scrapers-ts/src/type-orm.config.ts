@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import { Hotel } from './entities/Hotel';
 import { RequestConfiguration } from './entities/RequestConfiguration';
 import { LocationDecoderURL } from './entities/LocationDecoderURL';
+import { ScraperConfiguration } from './entities/ScraperConfiguration';
+import { LocationDecoderConfiguration } from './entities/LocationDecoderConfiguration';
 dotenv.config();
 
 const DropPoint = new DataSource({
@@ -14,7 +16,13 @@ const DropPoint = new DataSource({
   database: process.env.DB_NAME,
   // logging: true,
   synchronize: true,
-  entities: [Hotel, RequestConfiguration, LocationDecoderURL],
+  entities: [
+    Hotel,
+    RequestConfiguration,
+    LocationDecoderURL,
+    ScraperConfiguration,
+    LocationDecoderConfiguration,
+  ],
 });
 
 export default DropPoint;

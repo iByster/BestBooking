@@ -1,5 +1,4 @@
 const { parentPort, isMainThread } = require('worker_threads');
-import DropPoint from '../type-orm.config';
 import { WorkerPayload } from '../types';
 import runDOMJsWorker from './runDOMJsWorker';
 import runGraphQLRequestWorker from './runGraphQLRequestWorker';
@@ -29,15 +28,15 @@ const extractConfiguration = (origin: string) => {
 };
 
 parentPort.on('message', async (data: WorkerPayload) => {
-  await DropPoint.initialize();
-  const { decodedURL, origin, userInput } = data;
+  console.log('entered worker');
+
+  const { decodedURL, origin, userInput, page, scraperConf, requestConfiguration } = data;
 
   const confPath = extractConfiguration(origin);
-  let scraperConf = null,
-    conf = null;
+  let conf = null;
+
   if (confPath) {
     conf = await import(confPath);
-    scraperConf = conf.scraperConf;
   } else {
     console.error('no configuration path was found!');
   }
@@ -46,18 +45,17 @@ parentPort.on('message', async (data: WorkerPayload) => {
 
   if (conf) {
     if (scraperConf.workerType === 'Puppeteer') {
-      res = await runPuppeteerWorker(userInput, decodedURL, conf);
+      res = await runPuppeteerWorker(userInput, decodedURL, conf, scraperConf, page);
     } else if (scraperConf.workerType === 'RequestGraphQL') {
-      res = await runGraphQLRequestWorker(userInput, decodedURL, conf);
+      res = await runGraphQLRequestWorker(userInput, decodedURL, conf, requestConfiguration, scraperConf, page);
     } else if (scraperConf.workerType === 'RequestREST') {
-      res = await runRESTRequestWorker(userInput, decodedURL, conf);
+      res = await runRESTRequestWorker(userInput, decodedURL, conf, requestConfiguration, scraperConf, page);
     } else {
-      res = await runDOMJsWorker(userInput, decodedURL, conf);
+      res = await runDOMJsWorker(userInput, decodedURL, conf, scraperConf, page);
     }
   } else {
     console.log('No configuration was found');
   }
 
-  console.log('here');
-  parentPort.postMessage({ title: decodedURL });
+  parentPort.postMessage(res);
 });

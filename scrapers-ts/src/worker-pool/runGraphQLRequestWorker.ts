@@ -1,25 +1,21 @@
 import axios from 'axios';
 import { IScraperConfiguration, IUserInput } from '../types';
-import RequestConfigurationService from '../services/RequestConfigurationService';
 import delay from '../utils/delay';
 import rotateUserAgent from '../utils/rotateUserAgent';
 import fs from 'fs';
 import path from 'path';
+import { RequestConfiguration } from '../entities/RequestConfiguration';
+import { PAGE_THRESHOLD } from '../consts';
 
 const runGraphQLRequestWorker = async (
   userInput: IUserInput,
   decodedURL: string,
-  conf: any
+  conf: any,
+  requestConfiguration: RequestConfiguration  | null,
+  scraperConf: IScraperConfiguration,
+  page?: number
 ) => {
-  const requestConfigurationService = new RequestConfigurationService();
-  const scraperConf = conf.scraperConf as IScraperConfiguration;
-
   const decodeURLObj = new URL(decodedURL);
-
-  const requestConfiguration =
-    await requestConfigurationService.getRequestConfigurationByDomain(
-      decodeURLObj.origin
-    );
 
   if (requestConfiguration) {
     if (scraperConf.payload) {
@@ -40,17 +36,11 @@ const runGraphQLRequestWorker = async (
       requestConfiguration.headers
     );
 
+    const { payload, headers, requestURL, method } = requestConfiguration;
 
-    const { payload, headers, requestURL, method } =
-      requestConfiguration;
-
-
-    let pageNumber = scraperConf.initialPaginationValue;
-
-    // fs.writeFileSync(path.join(__dirname, 'response.json'), JSON.stringify(ceva));
-    fs.writeFileSync(path.join(__dirname, 'payload.json'), JSON.stringify(payload));
-    fs.writeFileSync(path.join(__dirname, 'headers.json'), JSON.stringify(headers));
-
+    let pageNumber = page || scraperConf.initialPaginationValue;
+    let pagesContor = 0;
+    let isMore = false;
 
     let response = await axios({
       url: requestURL,
@@ -59,13 +49,21 @@ const runGraphQLRequestWorker = async (
       headers: headers,
       //! proxy: {}
     });
-    
 
     let responseData = response.data;
 
+    let pageItems = []
+    let hotels = [];
 
-    while (await conf.extractData(responseData, userInput, decodedURL)) {
+    do {
+      pageItems = await conf.extractData(responseData, userInput, decodedURL);
+
+      if (pageItems.length > 0) {
+        hotels.push(pageItems);
+      }
+
       pageNumber += scraperConf.pageItemCount;
+      pagesContor += 1;
       requestConfiguration.payload = conf.paginate(
         requestConfiguration.payload,
         pageNumber
@@ -80,9 +78,16 @@ const runGraphQLRequestWorker = async (
         //! proxy: {}
       });
       responseData = response.data;
+    } while (pageItems.length > 0 && pagesContor !== PAGE_THRESHOLD);
+
+    if (pageItems.length > 0) {
+      isMore = true;
     }
 
-    return;
+    return {
+      isMore,
+      payload: hotels.flat(),
+    };
   } else {
     throw new Error('configuration not found');
   }

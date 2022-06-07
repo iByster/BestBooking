@@ -5,6 +5,7 @@ import {
   getUniqueListBy,
 } from '../utils/parseUtils';
 import moment from 'moment';
+import { HotelMetadata } from '../resolvers/HotelResolver';
 
 class HotelService {
   public async searchExistsToday(userInput: IUserInput) {
@@ -24,7 +25,6 @@ class HotelService {
       .andWhere('CURRENT_DATE = DATE("createdAt")')
       .getOne();
 
-    console.log(res);
     if (res) {
       return true;
     }
@@ -41,10 +41,12 @@ class HotelService {
     return res;
   }
 
-  public async getHotelsByUserInput(userInput: IUserInput, filters: any) {
+  public async getHotelsByUserInput(userInput: IUserInput, filters: any, metadata: HotelMetadata) {
     const { checkIn, checkOut, locationName, rooms } = userInput;
 
     const { adults, children } = destructureRooms(rooms);
+
+    const { limit, offset } = metadata;
 
     const dateFormat = 'YYYY-MM-DD';
 
@@ -57,7 +59,8 @@ class HotelService {
          AND DATE("checkIn") = $3 
          AND DATE("checkOut") = $4
          AND "locationName" = $5 AND rooms = $6
-         GROUP BY "hotelName"`,
+         GROUP BY "hotelName"
+         LIMIT $7 OFFSET $8`,
       [
         adults,
         children,
@@ -65,6 +68,8 @@ class HotelService {
         checkOutFormatted,
         locationName,
         rooms.length,
+        limit,
+        offset
       ]
     );
 
@@ -77,6 +82,12 @@ class HotelService {
     });
 
     return payload;
+  }
+
+  public async saveHotels(hotels: Hotel[]) {
+    hotels.forEach(async (h: Hotel) => {
+        await Hotel.create(h).save();
+    })
   }
 }
 

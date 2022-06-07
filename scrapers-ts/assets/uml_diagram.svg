@@ -1,0 +1,1257 @@
+<svg version="1.1" baseProfile="full" width="11487.3" height="916.0" viewbox="0 0 11487.25 916" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events">
+<desc >#.interface: fill=lightblue
+#.enumeration: fill=lightgreen
+#.type: fill=lightgray
+[&lt;interface&gt;ILocationDecoderConfiguration|+url: URL;+formConfiguration: IFormConfiguration;+resolveCaptcha: boolean;+needStyle: boolean|]
+[&lt;interface&gt;IFormConfiguration|+searchInputSelector: IGeneralSelector;+searchButtonSelector: IButtonSelector;+inputButtonSelector: IInputSelector \| undefined;+selectInputOption: IButtonSelector \| undefined;+extraStep: IGeneralSelector \| undefined;+acceptCookiesSelector: IGeneralSelector \| undefined|]
+[&lt;interface&gt;IButtonSelector|+buttonVisible: boolean|]
+[&lt;interface&gt;IInputSelector|+focusOn: boolean|]
+[&lt;interface&gt;IGeneralSelector|+query: string;+itemCount: number|]
+[&lt;interface&gt;IScraperSelector|+selector: IGeneralSelector;+type: ExtractType|]
+[&lt;interface&gt;IScrapeSelectors|+containerSelector: IScraperSelector \| undefined;+itemSelector: IScraperSelector \| undefined;+priceSelector: IScraperSelector \| undefined;+imageSelector: IScraperSelector \| undefined;+startsSelect: IScraperSelector \| undefined;+currencySelector: IScraperSelector \| undefined;+locationNameSelector: IScraperSelector \| undefined;+linkToHotelSelector: IScraperSelector \| undefined;+ratingSelector: IScraperSelector \| undefined;+distanceSelector: IScraperSelector \| undefined;+guestsSelector: IScraperSelector \| undefined;+nightsSelector: IScraperSelector \| undefined;+showMoreSelector: IScraperSelector \| undefined;+noElementsSelector: IScraperSelector \| undefined|]
+[&lt;interface&gt;IScraperConfiguration|+siteOrigin: string;+workerType: WorkerType;+pageItemCount: number;+infiniteScroll: boolean;+virtualization: boolean;+pagination: boolean;+ssr: boolean;+decodedURLQueryParams: boolean;+payload: boolean;+query: boolean;+initialPaginationValue: number;+needStyle: boolean;+scrapeSelectors: IScrapeSelectors \| undefined|]
+[&lt;interface&gt;IGraphQLScraperConfiguration||]
+[&lt;interface&gt;IRESTScraperConfiguration|+ssr: boolean;+decodedURLQueryParams: boolean|]
+[&lt;interface&gt;IPuppeterScraperConfiguration||]
+[&lt;interface&gt;IJSDomScraperConfiguration||]
+[&lt;interface&gt;IRoom|+adults: number;+childAges: number\[\]|]
+[&lt;interface&gt;IUserInput|+locationName: string;+checkIn: Date;+checkOut: Date;+rooms: IRoom\[\]|]
+[&lt;interface&gt;ISearchQueryParameters|+checkIn: string;+checkOut: string;+adults: string;+children: string;+rooms: string|]
+[&lt;interface&gt;ISearchQueryParametersAux|+priceCurrency: string;+lat: string \| undefined;+lon: string \| undefined|]
+[&lt;interface&gt;WorkerPayload|+decodedURL: string;+origin: string;+userInput: IUserInput;+scraperConf: IScraperConfiguration;+requestConfiguration: RequestConfiguration \| null;+page: number \| undefined|]
+[&lt;interface&gt;WorkerResponse|+payload: Hotel\[\];+isMore: boolean|]
+[&lt;interface&gt;QueueItem&lt;T,N&gt;|+callback: QueueCallback&lt;N&gt;;+getData: () =&gt; T|]
+[&lt;interface&gt;IBonusHotelInformation|+breakfastIncluded: boolean|]
+[&lt;interface&gt;IHotelInfomartion|+linkToHotel: URL;+hotelName: string;+locationName: string;+price: number;+currency: string;+rating: number;+starts: number;+image: string;+distanceFromLocation: number \| undefined;+guests: number \| undefined;+nights: number \| undefined;+bonus: IBonusHotelInformation \| undefined|]
+[&lt;type&gt;MyContext|+req: Request&lt;ParamsDictionary, any, any, qs.ParsedQs, Record&lt;string, any&gt;&gt; &amp; { session: Session &amp; Partial&lt;SessionData&gt; &amp; { userId?: number \| undefined; }; };+res: Response&lt;any, Record&lt;string, any&gt;&gt;|]
+[IGeneralSelector]&lt;:--[IButtonSelector]
+[IGeneralSelector]&lt;:--[IInputSelector]
+[JSONObject]&lt;:--[IGeneralSelector]
+[JSONObject]&lt;:--[IScraperSelector]
+[IScraperConfiguration]&lt;:--[IGraphQLScraperConfiguration]
+[IScraperConfiguration]&lt;:--[IRESTScraperConfiguration]
+[IScraperConfiguration]&lt;:--[IPuppeterScraperConfiguration]
+[IScraperConfiguration]&lt;:--[IJSDomScraperConfiguration]
+[BaseEntity|+id: number;+createdAt: Date \| undefined;+updatedAt: Date \| undefined|]
+[BaseEntity]&lt;:-[BaseEntity]
+[Hotel|+siteOrigin: string;+hotelName: string;+locationName: string;+priceTotal: number \| undefined;+priceTotalInRON: number \| undefined;+priceNight: number \| undefined;+priceRoom: number \| undefined;+currency: string;+rating: string \| undefined;+distanceFromLocation: string \| undefined;+adults: number;+rooms: number;+nights: number \| undefined;+childAges: number\[\];+children: number;+reviews: string \| undefined;+link: string;+imageLink: string \| undefined;+checkIn: Date;+checkOut: Date;+lat: number \| undefined;+lon: number \| undefined;+country: string;+area: string \| undefined;+adress: string \| undefined;+region: string \| undefined|]
+[BaseEntity]&lt;:-[Hotel]
+[LocationDecoderConfiguration|+needStyle: boolean;+resolveCaptcha: boolean;+url: URL;+formConfiguration: IFormConfiguration|]
+[BaseEntity]&lt;:-[LocationDecoderConfiguration]
+[ILocationDecoderConfiguration]&lt;:--[LocationDecoderConfiguration]
+[LocationDecoderURL|+siteOrigin: string;+locationName: string;+locationId: number \| undefined;+extractedURL: string|]
+[BaseEntity]&lt;:-[LocationDecoderURL]
+[RequestConfiguration|+siteOrigin: string;+requestURL: string;+apiType: ApiType;+headers: any;+payload: any;+queryParams: any;+method: string|]
+[BaseEntity]&lt;:-[RequestConfiguration]
+[ScraperConfiguration|+siteOrigin: string;+workerType: WorkerType;+pageItemCount: number;+infiniteScroll: boolean;+virtualization: boolean;+pagination: boolean;+ssr: boolean;+decodedURLQueryParams: boolean;+payload: boolean;+query: boolean;+initialPaginationValue: number;+offset: number;+needStyle: boolean;+scrapeSelectors: IScrapeSelectors \| undefined|]
+[BaseEntity]&lt;:-[ScraperConfiguration]
+[IScraperConfiguration]&lt;:--[ScraperConfiguration]
+[LocationDecoder|-locationName: string;-locationDecoderURLService: any|-click(): Promise&lt;void&gt;;-acceptCookies(): Promise&lt;void&gt;;-solveCaptcha(): Promise&lt;void&gt;;-delay(): Promise&lt;unknown&gt;;-clearInput(): Promise&lt;void&gt;;-search(): Promise&lt;URL&gt;;+getOneUrl(): Promise&lt;URL&gt;;+getAllUrls(): Promise&lt;URL\[\]&gt;]
+[HotelMetadata|+limit: number;+offset: number|]
+[Room|+adults: number;+childAges: number\[\]|]
+[UserInput|+checkIn: Date;+checkOut: Date;+locationName: string;+rooms: Room\[\]|]
+[PaginatedHotels|+hotels: Hotel\[\]\[\];+hasMore: boolean \| undefined|]
+[HotelResolver|-hotelService: default|+getGeniusHotelsOffers(): Promise&lt;PaginatedHotels&gt;]
+[IRoom]&lt;:--[Room]
+[IUserInput]&lt;:--[UserInput]
+[HotelService||+searchExistsToday(): Promise&lt;boolean&gt;;+getHotelsByNameSortedByPrice(): Promise&lt;Hotel\[\]&gt;;+getHotelsByUserInput(): Promise&lt;any&gt;;+saveHotels(): Promise&lt;void&gt;]
+[LocationDecoderURLService||+checkIfLocationIdStored(): Promise&lt;LocationDecoderURL \| null&gt;]
+[RequestConfigurationService||+getRequestConfigurationByDomain(): Promise&lt;RequestConfiguration \| null&gt;]
+[ScraperConfigurationService||+getScraperConfigurationByOrigin(): Promise&lt;ScraperConfiguration \| null&gt;]
+[Scraper|-urls: URL\[\];-userInput: IUserInput;-pool: WorkerPool&lt;WorkerPayload, WorkerResponse&gt;;-scraperConfigurationService: default;-requestConfigurationService: default;-hotelService: default;-eventEmitter: EventEmitter|+scrape(): Promise&lt;void&gt;]
+[WorkerPool&lt;T,N&gt;|-queue: QueueItem&lt;T, N&gt;\[\];-workersById: { \[key: number\]: Worker; };-activeWorkersById: { \[key: number\]: boolean; };+workerPath: string;+numberOfThreads: number|-init(): null \| undefined;+run(): Promise&lt;N&gt;;-getInactiveWorkerId(): number;-runWorker(): Promise&lt;void&gt;]</desc>
+<g stroke-width="1.0" text-align="left" font="12pt Helvetica, Arial, sans-serif" font-size="12pt" font-family="Helvetica" font-weight="bold" font-style="normal">
+<g transform="translate(0.5, 0.5)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" stroke="#33322E">
+<g stroke="transparent" fill="transparent">
+<rect x="0.0" y="0.0" height="916.0" width="11487.3" stroke="none"></rect>
+</g>
+<g transform="translate(8, 8)" fill="#33322E">
+<g transform="translate(20, 20)" fill="#eee8d5" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal">
+<g stroke-dasharray="6 6">
+<path d="M164.2 582.6 L101 770 L101 790 L101.0 790.0 " fill="none"></path>
+</g>
+<path d="M169.2 584.3 L164.2 582.6 L159.1 580.9 L168.4 570.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M214.4 581.5 L325 770 L325 790 L325.0 790.0 " fill="none"></path>
+</g>
+<path d="M219.0 578.8 L214.4 581.5 L209.8 584.2 L207.7 570.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M182.8 161.3 L182.75 285 L182.75 485 L182.8 485.0 " fill="none"></path>
+</g>
+<path d="M188.1 161.3 L182.8 161.3 L177.4 161.3 L182.8 148.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M226.1 153.9 L492 285 L492 485 L492.0 485.0 " fill="none"></path>
+</g>
+<path d="M228.5 149.1 L226.1 153.9 L223.8 158.7 L214.2 148.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1377.9 172.0 L778.5 285 L778.5 504 L778.5 504.0 " fill="none"></path>
+</g>
+<path d="M1378.9 177.3 L1377.9 172.0 L1376.9 166.8 L1391.0 169.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1378.3 198.6 L1104.5 285 L1104.5 485 L1104.5 485.0 " fill="none"></path>
+</g>
+<path d="M1379.9 203.6 L1378.3 198.6 L1376.7 193.5 L1391.0 194.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1587.5 270.8 L1587.5 285 L1587.5 504 L1587.5 504.0 " fill="none"></path>
+</g>
+<path d="M1592.8 270.8 L1587.5 270.8 L1582.2 270.8 L1587.5 257.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1795.8 240.9 L1880.5 285 L1880.5 504 L1880.5 504.0 " fill="none"></path>
+</g>
+<path d="M1798.3 236.2 L1795.8 240.9 L1793.4 245.7 L1784.0 234.8 Z"></path>
+<path d="M2924.9 88.1 L2942.25 82.5 L2949.75 82.5 L2949.75 82.5 L2957.25 132.5 L2957.25 132.5 L2949.75 182.5 L2949.75 182.5 L2942.25 182.5 L2942.25 182.5 L2912.25 172.75974025974025 L2912.3 172.8 " fill="none"></path>
+<path d="M2923.3 83.1 L2924.9 88.1 L2926.6 93.2 L2912.3 92.2 Z"></path>
+<path d="M2714.2 190.7 L2594.5 285 L2392 415.2553050397878 L2392.0 415.3 " fill="none"></path>
+<path d="M2717.5 194.9 L2714.2 190.7 L2710.9 186.6 L2724.7 182.5 Z"></path>
+<path d="M2855.0 191.3 L2961.25 285 L2682.605670103093 470 L2682.6 470.0 " fill="none"></path>
+<path d="M2858.5 187.3 L2855.0 191.3 L2851.4 195.3 L2845.0 182.5 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M2410.5 203.3 L2410.5 285 L2552.0154639175257 470 L2552.0 470.0 " fill="none"></path>
+</g>
+<path d="M2415.8 203.3 L2410.5 203.3 L2405.2 203.3 L2410.5 190.0 Z"></path>
+<path d="M2868.9 190.3 L3001.25 285 L3279.894329896907 470 L3279.9 470.0 " fill="none"></path>
+<path d="M2872.0 185.9 L2868.9 190.3 L2865.8 194.6 L2858.1 182.5 Z"></path>
+<path d="M2925.5 146.9 L4246 285 L4969.75 499.6247324977071 L4969.8 499.6 " fill="none"></path>
+<path d="M2926.1 141.6 L2925.5 146.9 L2925.0 152.2 L2912.3 145.5 Z"></path>
+<path d="M2925.5 145.3 L4426.25 285 L3193 494.17162091274696 L3193.0 494.2 " fill="none"></path>
+<path d="M2926.0 140.0 L2925.5 145.3 L2925.0 150.6 L2912.3 144.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M1797.0 181.0 L2246.5 285 L2800 463.96500000000003 L2800.0 464.0 " fill="none"></path>
+</g>
+<path d="M1798.2 175.8 L1797.0 181.0 L1795.8 186.2 L1784.0 178.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M6566.8 188.3 L6566.75 285 L6566.75 485 L6566.8 485.0 " fill="none"></path>
+</g>
+<path d="M6572.1 188.3 L6566.8 188.3 L6561.4 188.3 L6566.8 175.0 Z"></path>
+<g stroke-dasharray="6 6">
+<path d="M11337.3 203.3 L11337.25 285 L11337.25 470 L11337.3 470.0 " fill="none"></path>
+</g>
+<path d="M11342.6 203.3 L11337.3 203.3 L11331.9 203.3 L11337.3 190.0 Z"></path>
+<g data-name="ILocationDecoderConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="ILocationDecoderConfiguration">
+<rect x="2247.0" y="75.0" height="115.0" width="328.0" data-name="ILocationDecoderConfiguration"></rect>
+<path d="M2247.0 106.0 L2575.0 106.0" fill="none" data-name="ILocationDecoderConfiguration"></path>
+<path d="M2247.0 182.0 L2575.0 182.0" fill="none" data-name="ILocationDecoderConfiguration"></path>
+</g>
+<g transform="translate(2247, 75)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ILocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ILocationDecoderConfiguration">
+<a id="..\src\types.ts.ILocationDecoderConfiguration" xlink:href="..\src\types.ts"><text x="156.0" y="13.5" stroke="none" text-anchor="middle" data-name="ILocationDecoderConfiguration">ILocationDecoderConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(2247, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ILocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ILocationDecoderConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="ILocationDecoderConfiguration">+url: URL</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ILocationDecoderConfiguration">+formConfiguration: IFormConfiguration</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ILocationDecoderConfiguration">+resolveCaptcha: boolean</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ILocationDecoderConfiguration">+needStyle: boolean</text>
+
+</g>
+</g>
+<g transform="translate(2247, 182)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ILocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ILocationDecoderConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IFormConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IFormConfiguration">
+<rect x="279.0" y="60.0" height="145.0" width="445.0" data-name="IFormConfiguration"></rect>
+<path d="M279.0 91.0 L724.0 91.0" fill="none" data-name="IFormConfiguration"></path>
+<path d="M279.0 197.0 L724.0 197.0" fill="none" data-name="IFormConfiguration"></path>
+</g>
+<g transform="translate(279, 60)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IFormConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IFormConfiguration">
+<a id="..\src\types.ts.IFormConfiguration" xlink:href="..\src\types.ts"><text x="214.5" y="13.5" stroke="none" text-anchor="middle" data-name="IFormConfiguration">IFormConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(279, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IFormConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IFormConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="IFormConfiguration">+searchInputSelector: IGeneralSelector</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IFormConfiguration">+searchButtonSelector: IButtonSelector</text>
+<text x="0.0" y="43.5" stroke="none" data-name="IFormConfiguration">+inputButtonSelector: IInputSelector | undefined</text>
+<text x="0.0" y="58.5" stroke="none" data-name="IFormConfiguration">+selectInputOption: IButtonSelector | undefined</text>
+<text x="0.0" y="73.5" stroke="none" data-name="IFormConfiguration">+extraStep: IGeneralSelector | undefined</text>
+<text x="0.0" y="88.5" stroke="none" data-name="IFormConfiguration">+acceptCookiesSelector: IGeneralSelector | undefined</text>
+
+</g>
+</g>
+<g transform="translate(279, 197)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IFormConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IFormConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IButtonSelector">
+<g fill="lightblue" stroke="#33322E" data-name="IButtonSelector">
+<rect x="0.0" y="790.0" height="70.0" width="202.0" data-name="IButtonSelector"></rect>
+<path d="M0.0 821.0 L202.0 821.0" fill="none" data-name="IButtonSelector"></path>
+<path d="M0.0 852.0 L202.0 852.0" fill="none" data-name="IButtonSelector"></path>
+</g>
+<g transform="translate(0, 790)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IButtonSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IButtonSelector">
+<a id="..\src\types.ts.IButtonSelector" xlink:href="..\src\types.ts"><text x="93.0" y="13.5" stroke="none" text-anchor="middle" data-name="IButtonSelector">IButtonSelector</text></a>
+
+</g>
+</g>
+<g transform="translate(0, 821)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IButtonSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IButtonSelector">
+<text x="0.0" y="13.5" stroke="none" data-name="IButtonSelector">+buttonVisible: boolean</text>
+
+</g>
+</g>
+<g transform="translate(0, 852)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IButtonSelector">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IButtonSelector">
+
+</g>
+</g>
+</g>
+<g data-name="IInputSelector">
+<g fill="lightblue" stroke="#33322E" data-name="IInputSelector">
+<rect x="242.0" y="790.0" height="70.0" width="166.0" data-name="IInputSelector"></rect>
+<path d="M242.0 821.0 L408.0 821.0" fill="none" data-name="IInputSelector"></path>
+<path d="M242.0 852.0 L408.0 852.0" fill="none" data-name="IInputSelector"></path>
+</g>
+<g transform="translate(242, 790)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IInputSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IInputSelector">
+<a id="..\src\types.ts.IInputSelector" xlink:href="..\src\types.ts"><text x="75.0" y="13.5" stroke="none" text-anchor="middle" data-name="IInputSelector">IInputSelector</text></a>
+
+</g>
+</g>
+<g transform="translate(242, 821)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IInputSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IInputSelector">
+<text x="0.0" y="13.5" stroke="none" data-name="IInputSelector">+focusOn: boolean</text>
+
+</g>
+</g>
+<g transform="translate(242, 852)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IInputSelector">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IInputSelector">
+
+</g>
+</g>
+</g>
+<g data-name="IGeneralSelector">
+<g fill="lightblue" stroke="#33322E" data-name="IGeneralSelector">
+<rect x="95.0" y="485.0" height="85.0" width="176.0" data-name="IGeneralSelector"></rect>
+<path d="M95.0 516.0 L271.0 516.0" fill="none" data-name="IGeneralSelector"></path>
+<path d="M95.0 562.0 L271.0 562.0" fill="none" data-name="IGeneralSelector"></path>
+</g>
+<g transform="translate(95, 485)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGeneralSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IGeneralSelector">
+<a id="..\src\types.ts.IGeneralSelector" xlink:href="..\src\types.ts"><text x="80.0" y="13.5" stroke="none" text-anchor="middle" data-name="IGeneralSelector">IGeneralSelector</text></a>
+
+</g>
+</g>
+<g transform="translate(95, 516)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGeneralSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IGeneralSelector">
+<text x="0.0" y="13.5" stroke="none" data-name="IGeneralSelector">+query: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IGeneralSelector">+itemCount: number</text>
+
+</g>
+</g>
+<g transform="translate(95, 562)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGeneralSelector">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IGeneralSelector">
+
+</g>
+</g>
+</g>
+<g data-name="IScraperSelector">
+<g fill="lightblue" stroke="#33322E" data-name="IScraperSelector">
+<rect x="376.0" y="485.0" height="85.0" width="232.0" data-name="IScraperSelector"></rect>
+<path d="M376.0 516.0 L608.0 516.0" fill="none" data-name="IScraperSelector"></path>
+<path d="M376.0 562.0 L608.0 562.0" fill="none" data-name="IScraperSelector"></path>
+</g>
+<g transform="translate(376, 485)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IScraperSelector">
+<a id="..\src\types.ts.IScraperSelector" xlink:href="..\src\types.ts"><text x="108.0" y="13.5" stroke="none" text-anchor="middle" data-name="IScraperSelector">IScraperSelector</text></a>
+
+</g>
+</g>
+<g transform="translate(376, 516)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperSelector">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IScraperSelector">
+<text x="0.0" y="13.5" stroke="none" data-name="IScraperSelector">+selector: IGeneralSelector</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IScraperSelector">+type: ExtractType</text>
+
+</g>
+</g>
+<g transform="translate(376, 562)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperSelector">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IScraperSelector">
+
+</g>
+</g>
+</g>
+<g data-name="IScrapeSelectors">
+<g fill="lightblue" stroke="#33322E" data-name="IScrapeSelectors">
+<rect x="764.0" y="0.0" height="265.0" width="435.0" data-name="IScrapeSelectors"></rect>
+<path d="M764.0 31.0 L1199.0 31.0" fill="none" data-name="IScrapeSelectors"></path>
+<path d="M764.0 257.0 L1199.0 257.0" fill="none" data-name="IScrapeSelectors"></path>
+</g>
+<g transform="translate(764, 0)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScrapeSelectors">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IScrapeSelectors">
+<a id="..\src\types.ts.IScrapeSelectors" xlink:href="..\src\types.ts"><text x="209.5" y="13.5" stroke="none" text-anchor="middle" data-name="IScrapeSelectors">IScrapeSelectors</text></a>
+
+</g>
+</g>
+<g transform="translate(764, 31)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScrapeSelectors">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IScrapeSelectors">
+<text x="0.0" y="13.5" stroke="none" data-name="IScrapeSelectors">+containerSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IScrapeSelectors">+itemSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="43.5" stroke="none" data-name="IScrapeSelectors">+priceSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="58.5" stroke="none" data-name="IScrapeSelectors">+imageSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="73.5" stroke="none" data-name="IScrapeSelectors">+startsSelect: IScraperSelector | undefined</text>
+<text x="0.0" y="88.5" stroke="none" data-name="IScrapeSelectors">+currencySelector: IScraperSelector | undefined</text>
+<text x="0.0" y="103.5" stroke="none" data-name="IScrapeSelectors">+locationNameSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="118.5" stroke="none" data-name="IScrapeSelectors">+linkToHotelSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="133.5" stroke="none" data-name="IScrapeSelectors">+ratingSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="148.5" stroke="none" data-name="IScrapeSelectors">+distanceSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="163.5" stroke="none" data-name="IScrapeSelectors">+guestsSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="178.5" stroke="none" data-name="IScrapeSelectors">+nightsSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="193.5" stroke="none" data-name="IScrapeSelectors">+showMoreSelector: IScraperSelector | undefined</text>
+<text x="0.0" y="208.5" stroke="none" data-name="IScrapeSelectors">+noElementsSelector: IScraperSelector | undefined</text>
+
+</g>
+</g>
+<g transform="translate(764, 257)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScrapeSelectors">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IScrapeSelectors">
+
+</g>
+</g>
+</g>
+<g data-name="IScraperConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IScraperConfiguration">
+<rect x="1391.0" y="8.0" height="250.0" width="393.0" data-name="IScraperConfiguration"></rect>
+<path d="M1391.0 39.0 L1784.0 39.0" fill="none" data-name="IScraperConfiguration"></path>
+<path d="M1391.0 250.0 L1784.0 250.0" fill="none" data-name="IScraperConfiguration"></path>
+</g>
+<g transform="translate(1391, 8)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IScraperConfiguration">
+<a id="..\src\types.ts.IScraperConfiguration" xlink:href="..\src\types.ts"><text x="188.5" y="13.5" stroke="none" text-anchor="middle" data-name="IScraperConfiguration">IScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(1391, 39)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IScraperConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="IScraperConfiguration">+siteOrigin: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IScraperConfiguration">+workerType: WorkerType</text>
+<text x="0.0" y="43.5" stroke="none" data-name="IScraperConfiguration">+pageItemCount: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="IScraperConfiguration">+infiniteScroll: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="IScraperConfiguration">+virtualization: boolean</text>
+<text x="0.0" y="88.5" stroke="none" data-name="IScraperConfiguration">+pagination: boolean</text>
+<text x="0.0" y="103.5" stroke="none" data-name="IScraperConfiguration">+ssr: boolean</text>
+<text x="0.0" y="118.5" stroke="none" data-name="IScraperConfiguration">+decodedURLQueryParams: boolean</text>
+<text x="0.0" y="133.5" stroke="none" data-name="IScraperConfiguration">+payload: boolean</text>
+<text x="0.0" y="148.5" stroke="none" data-name="IScraperConfiguration">+query: boolean</text>
+<text x="0.0" y="163.5" stroke="none" data-name="IScraperConfiguration">+initialPaginationValue: number</text>
+<text x="0.0" y="178.5" stroke="none" data-name="IScraperConfiguration">+needStyle: boolean</text>
+<text x="0.0" y="193.5" stroke="none" data-name="IScraperConfiguration">+scrapeSelectors: IScrapeSelectors | undefined</text>
+
+</g>
+</g>
+<g transform="translate(1391, 250)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IGraphQLScraperConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IGraphQLScraperConfiguration">
+<rect x="648.0" y="504.0" height="47.0" width="261.0" data-name="IGraphQLScraperConfiguration"></rect>
+<path d="M648.0 535.0 L909.0 535.0" fill="none" data-name="IGraphQLScraperConfiguration"></path>
+<path d="M648.0 543.0 L909.0 543.0" fill="none" data-name="IGraphQLScraperConfiguration"></path>
+</g>
+<g transform="translate(648, 504)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGraphQLScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IGraphQLScraperConfiguration">
+<a id="..\src\types.ts.IGraphQLScraperConfiguration" xlink:href="..\src\types.ts"><text x="122.5" y="13.5" stroke="none" text-anchor="middle" data-name="IGraphQLScraperConfiguration">IGraphQLScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(648, 535)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGraphQLScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IGraphQLScraperConfiguration">
+
+</g>
+</g>
+<g transform="translate(648, 543)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IGraphQLScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IGraphQLScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IRESTScraperConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IRESTScraperConfiguration">
+<rect x="949.0" y="485.0" height="85.0" width="311.0" data-name="IRESTScraperConfiguration"></rect>
+<path d="M949.0 516.0 L1260.0 516.0" fill="none" data-name="IRESTScraperConfiguration"></path>
+<path d="M949.0 562.0 L1260.0 562.0" fill="none" data-name="IRESTScraperConfiguration"></path>
+</g>
+<g transform="translate(949, 485)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRESTScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IRESTScraperConfiguration">
+<a id="..\src\types.ts.IRESTScraperConfiguration" xlink:href="..\src\types.ts"><text x="147.5" y="13.5" stroke="none" text-anchor="middle" data-name="IRESTScraperConfiguration">IRESTScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(949, 516)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRESTScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IRESTScraperConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="IRESTScraperConfiguration">+ssr: boolean</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IRESTScraperConfiguration">+decodedURLQueryParams: boolean</text>
+
+</g>
+</g>
+<g transform="translate(949, 562)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRESTScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IRESTScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IPuppeterScraperConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IPuppeterScraperConfiguration">
+<rect x="1457.0" y="504.0" height="47.0" width="261.0" data-name="IPuppeterScraperConfiguration"></rect>
+<path d="M1457.0 535.0 L1718.0 535.0" fill="none" data-name="IPuppeterScraperConfiguration"></path>
+<path d="M1457.0 543.0 L1718.0 543.0" fill="none" data-name="IPuppeterScraperConfiguration"></path>
+</g>
+<g transform="translate(1457, 504)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IPuppeterScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IPuppeterScraperConfiguration">
+<a id="..\src\types.ts.IPuppeterScraperConfiguration" xlink:href="..\src\types.ts"><text x="122.5" y="13.5" stroke="none" text-anchor="middle" data-name="IPuppeterScraperConfiguration">IPuppeterScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(1457, 535)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IPuppeterScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IPuppeterScraperConfiguration">
+
+</g>
+</g>
+<g transform="translate(1457, 543)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IPuppeterScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IPuppeterScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IJSDomScraperConfiguration">
+<g fill="lightblue" stroke="#33322E" data-name="IJSDomScraperConfiguration">
+<rect x="1758.0" y="504.0" height="47.0" width="245.0" data-name="IJSDomScraperConfiguration"></rect>
+<path d="M1758.0 535.0 L2003.0 535.0" fill="none" data-name="IJSDomScraperConfiguration"></path>
+<path d="M1758.0 543.0 L2003.0 543.0" fill="none" data-name="IJSDomScraperConfiguration"></path>
+</g>
+<g transform="translate(1758, 504)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IJSDomScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IJSDomScraperConfiguration">
+<a id="..\src\types.ts.IJSDomScraperConfiguration" xlink:href="..\src\types.ts"><text x="114.5" y="13.5" stroke="none" text-anchor="middle" data-name="IJSDomScraperConfiguration">IJSDomScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(1758, 535)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IJSDomScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IJSDomScraperConfiguration">
+
+</g>
+</g>
+<g transform="translate(1758, 543)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IJSDomScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IJSDomScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="IRoom">
+<g fill="lightblue" stroke="#33322E" data-name="IRoom">
+<rect x="6475.0" y="90.0" height="85.0" width="183.0" data-name="IRoom"></rect>
+<path d="M6475.0 121.0 L6658.0 121.0" fill="none" data-name="IRoom"></path>
+<path d="M6475.0 167.0 L6658.0 167.0" fill="none" data-name="IRoom"></path>
+</g>
+<g transform="translate(6475, 90)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRoom">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IRoom">
+<a id="..\src\types.ts.IRoom" xlink:href="..\src\types.ts"><text x="83.5" y="13.5" stroke="none" text-anchor="middle" data-name="IRoom">IRoom</text></a>
+
+</g>
+</g>
+<g transform="translate(6475, 121)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRoom">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IRoom">
+<text x="0.0" y="13.5" stroke="none" data-name="IRoom">+adults: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IRoom">+childAges: number[]</text>
+
+</g>
+</g>
+<g transform="translate(6475, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IRoom">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IRoom">
+
+</g>
+</g>
+</g>
+<g data-name="IUserInput">
+<g fill="lightblue" stroke="#33322E" data-name="IUserInput">
+<rect x="11243.0" y="75.0" height="115.0" width="188.0" data-name="IUserInput"></rect>
+<path d="M11243.0 106.0 L11431.0 106.0" fill="none" data-name="IUserInput"></path>
+<path d="M11243.0 182.0 L11431.0 182.0" fill="none" data-name="IUserInput"></path>
+</g>
+<g transform="translate(11243, 75)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUserInput">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IUserInput">
+<a id="..\src\types.ts.IUserInput" xlink:href="..\src\types.ts"><text x="86.0" y="13.5" stroke="none" text-anchor="middle" data-name="IUserInput">IUserInput</text></a>
+
+</g>
+</g>
+<g transform="translate(11243, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUserInput">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IUserInput">
+<text x="0.0" y="13.5" stroke="none" data-name="IUserInput">+locationName: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IUserInput">+checkIn: Date</text>
+<text x="0.0" y="43.5" stroke="none" data-name="IUserInput">+checkOut: Date</text>
+<text x="0.0" y="58.5" stroke="none" data-name="IUserInput">+rooms: IRoom[]</text>
+
+</g>
+</g>
+<g transform="translate(11243, 182)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IUserInput">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IUserInput">
+
+</g>
+</g>
+</g>
+<g data-name="ISearchQueryParameters">
+<g fill="lightblue" stroke="#33322E" data-name="ISearchQueryParameters">
+<rect x="3002.0" y="68.0" height="130.0" width="216.0" data-name="ISearchQueryParameters"></rect>
+<path d="M3002.0 99.0 L3218.0 99.0" fill="none" data-name="ISearchQueryParameters"></path>
+<path d="M3002.0 190.0 L3218.0 190.0" fill="none" data-name="ISearchQueryParameters"></path>
+</g>
+<g transform="translate(3002, 68)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParameters">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISearchQueryParameters">
+<a id="..\src\types.ts.ISearchQueryParameters" xlink:href="..\src\types.ts"><text x="100.0" y="13.5" stroke="none" text-anchor="middle" data-name="ISearchQueryParameters">ISearchQueryParameters</text></a>
+
+</g>
+</g>
+<g transform="translate(3002, 99)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParameters">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISearchQueryParameters">
+<text x="0.0" y="13.5" stroke="none" data-name="ISearchQueryParameters">+checkIn: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISearchQueryParameters">+checkOut: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISearchQueryParameters">+adults: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ISearchQueryParameters">+children: string</text>
+<text x="0.0" y="73.5" stroke="none" data-name="ISearchQueryParameters">+rooms: string</text>
+
+</g>
+</g>
+<g transform="translate(3002, 190)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParameters">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISearchQueryParameters">
+
+</g>
+</g>
+</g>
+<g data-name="ISearchQueryParametersAux">
+<g fill="lightblue" stroke="#33322E" data-name="ISearchQueryParametersAux">
+<rect x="3258.0" y="83.0" height="100.0" width="246.0" data-name="ISearchQueryParametersAux"></rect>
+<path d="M3258.0 114.0 L3504.0 114.0" fill="none" data-name="ISearchQueryParametersAux"></path>
+<path d="M3258.0 175.0 L3504.0 175.0" fill="none" data-name="ISearchQueryParametersAux"></path>
+</g>
+<g transform="translate(3258, 83)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParametersAux">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ISearchQueryParametersAux">
+<a id="..\src\types.ts.ISearchQueryParametersAux" xlink:href="..\src\types.ts"><text x="115.0" y="13.5" stroke="none" text-anchor="middle" data-name="ISearchQueryParametersAux">ISearchQueryParametersAux</text></a>
+
+</g>
+</g>
+<g transform="translate(3258, 114)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParametersAux">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ISearchQueryParametersAux">
+<text x="0.0" y="13.5" stroke="none" data-name="ISearchQueryParametersAux">+priceCurrency: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ISearchQueryParametersAux">+lat: string | undefined</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ISearchQueryParametersAux">+lon: string | undefined</text>
+
+</g>
+</g>
+<g transform="translate(3258, 175)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ISearchQueryParametersAux">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ISearchQueryParametersAux">
+
+</g>
+</g>
+</g>
+<g data-name="WorkerPayload">
+<g fill="lightblue" stroke="#33322E" data-name="WorkerPayload">
+<rect x="3544.0" y="60.0" height="145.0" width="417.0" data-name="WorkerPayload"></rect>
+<path d="M3544.0 91.0 L3961.0 91.0" fill="none" data-name="WorkerPayload"></path>
+<path d="M3544.0 197.0 L3961.0 197.0" fill="none" data-name="WorkerPayload"></path>
+</g>
+<g transform="translate(3544, 60)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerPayload">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="WorkerPayload">
+<a id="..\src\types.ts.WorkerPayload" xlink:href="..\src\types.ts"><text x="200.5" y="13.5" stroke="none" text-anchor="middle" data-name="WorkerPayload">WorkerPayload</text></a>
+
+</g>
+</g>
+<g transform="translate(3544, 91)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerPayload">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="WorkerPayload">
+<text x="0.0" y="13.5" stroke="none" data-name="WorkerPayload">+decodedURL: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="WorkerPayload">+origin: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="WorkerPayload">+userInput: IUserInput</text>
+<text x="0.0" y="58.5" stroke="none" data-name="WorkerPayload">+scraperConf: IScraperConfiguration</text>
+<text x="0.0" y="73.5" stroke="none" data-name="WorkerPayload">+requestConfiguration: RequestConfiguration | null</text>
+<text x="0.0" y="88.5" stroke="none" data-name="WorkerPayload">+page: number | undefined</text>
+
+</g>
+</g>
+<g transform="translate(3544, 197)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerPayload">
+<g transform="translate(8, 8)" fill="#33322E" data-name="WorkerPayload">
+
+</g>
+</g>
+</g>
+<g data-name="WorkerResponse">
+<g fill="lightblue" stroke="#33322E" data-name="WorkerResponse">
+<rect x="4001.0" y="90.0" height="85.0" width="153.0" data-name="WorkerResponse"></rect>
+<path d="M4001.0 121.0 L4154.0 121.0" fill="none" data-name="WorkerResponse"></path>
+<path d="M4001.0 167.0 L4154.0 167.0" fill="none" data-name="WorkerResponse"></path>
+</g>
+<g transform="translate(4001, 90)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="WorkerResponse">
+<a id="..\src\types.ts.WorkerResponse" xlink:href="..\src\types.ts"><text x="68.5" y="13.5" stroke="none" text-anchor="middle" data-name="WorkerResponse">WorkerResponse</text></a>
+
+</g>
+</g>
+<g transform="translate(4001, 121)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerResponse">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="WorkerResponse">
+<text x="0.0" y="13.5" stroke="none" data-name="WorkerResponse">+payload: Hotel[]</text>
+<text x="0.0" y="28.5" stroke="none" data-name="WorkerResponse">+isMore: boolean</text>
+
+</g>
+</g>
+<g transform="translate(4001, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerResponse">
+<g transform="translate(8, 8)" fill="#33322E" data-name="WorkerResponse">
+
+</g>
+</g>
+</g>
+<g data-name="QueueItem&lt;T,N&gt;">
+<g fill="lightblue" stroke="#33322E" data-name="QueueItem&lt;T,N&gt;">
+<rect x="4194.0" y="90.0" height="85.0" width="254.0" data-name="QueueItem&lt;T,N&gt;"></rect>
+<path d="M4194.0 121.0 L4448.0 121.0" fill="none" data-name="QueueItem&lt;T,N&gt;"></path>
+<path d="M4194.0 167.0 L4448.0 167.0" fill="none" data-name="QueueItem&lt;T,N&gt;"></path>
+</g>
+<g transform="translate(4194, 90)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="QueueItem&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="QueueItem&lt;T,N&gt;">
+<a id="..\src\types.ts.QueueItem&lt;T,N&gt;" xlink:href="..\src\types.ts"><text x="119.0" y="13.5" stroke="none" text-anchor="middle" data-name="QueueItem&lt;T,N&gt;">QueueItem&lt;T,N&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(4194, 121)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="QueueItem&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="QueueItem&lt;T,N&gt;">
+<text x="0.0" y="13.5" stroke="none" data-name="QueueItem&lt;T,N&gt;">+callback: QueueCallback&lt;N&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="QueueItem&lt;T,N&gt;">+getData: () =&gt; T</text>
+
+</g>
+</g>
+<g transform="translate(4194, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="QueueItem&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" data-name="QueueItem&lt;T,N&gt;">
+
+</g>
+</g>
+</g>
+<g data-name="IBonusHotelInformation">
+<g fill="lightblue" stroke="#33322E" data-name="IBonusHotelInformation">
+<rect x="4488.0" y="98.0" height="70.0" width="242.0" data-name="IBonusHotelInformation"></rect>
+<path d="M4488.0 129.0 L4730.0 129.0" fill="none" data-name="IBonusHotelInformation"></path>
+<path d="M4488.0 160.0 L4730.0 160.0" fill="none" data-name="IBonusHotelInformation"></path>
+</g>
+<g transform="translate(4488, 98)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IBonusHotelInformation">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IBonusHotelInformation">
+<a id=".IBonusHotelInformation" xlink:href=""><text x="113.0" y="13.5" stroke="none" text-anchor="middle" data-name="IBonusHotelInformation">IBonusHotelInformation</text></a>
+
+</g>
+</g>
+<g transform="translate(4488, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IBonusHotelInformation">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IBonusHotelInformation">
+<text x="0.0" y="13.5" stroke="none" data-name="IBonusHotelInformation">+breakfastIncluded: boolean</text>
+
+</g>
+</g>
+<g transform="translate(4488, 160)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IBonusHotelInformation">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IBonusHotelInformation">
+
+</g>
+</g>
+</g>
+<g data-name="IHotelInfomartion">
+<g fill="lightblue" stroke="#33322E" data-name="IHotelInfomartion">
+<rect x="4770.0" y="15.0" height="235.0" width="365.0" data-name="IHotelInfomartion"></rect>
+<path d="M4770.0 46.0 L5135.0 46.0" fill="none" data-name="IHotelInfomartion"></path>
+<path d="M4770.0 242.0 L5135.0 242.0" fill="none" data-name="IHotelInfomartion"></path>
+</g>
+<g transform="translate(4770, 15)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IHotelInfomartion">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="IHotelInfomartion">
+<a id="..\src\types.ts.IHotelInfomartion" xlink:href="..\src\types.ts"><text x="174.5" y="13.5" stroke="none" text-anchor="middle" data-name="IHotelInfomartion">IHotelInfomartion</text></a>
+
+</g>
+</g>
+<g transform="translate(4770, 46)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IHotelInfomartion">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="IHotelInfomartion">
+<text x="0.0" y="13.5" stroke="none" data-name="IHotelInfomartion">+linkToHotel: URL</text>
+<text x="0.0" y="28.5" stroke="none" data-name="IHotelInfomartion">+hotelName: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="IHotelInfomartion">+locationName: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="IHotelInfomartion">+price: number</text>
+<text x="0.0" y="73.5" stroke="none" data-name="IHotelInfomartion">+currency: string</text>
+<text x="0.0" y="88.5" stroke="none" data-name="IHotelInfomartion">+rating: number</text>
+<text x="0.0" y="103.5" stroke="none" data-name="IHotelInfomartion">+starts: number</text>
+<text x="0.0" y="118.5" stroke="none" data-name="IHotelInfomartion">+image: string</text>
+<text x="0.0" y="133.5" stroke="none" data-name="IHotelInfomartion">+distanceFromLocation: number | undefined</text>
+<text x="0.0" y="148.5" stroke="none" data-name="IHotelInfomartion">+guests: number | undefined</text>
+<text x="0.0" y="163.5" stroke="none" data-name="IHotelInfomartion">+nights: number | undefined</text>
+<text x="0.0" y="178.5" stroke="none" data-name="IHotelInfomartion">+bonus: IBonusHotelInformation | undefined</text>
+
+</g>
+</g>
+<g transform="translate(4770, 242)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="IHotelInfomartion">
+<g transform="translate(8, 8)" fill="#33322E" data-name="IHotelInfomartion">
+
+</g>
+</g>
+</g>
+<g data-name="MyContext">
+<g fill="lightgray" stroke="#33322E" data-name="MyContext">
+<rect x="5175.0" y="75.0" height="115.0" width="1260.0" data-name="MyContext"></rect>
+<path d="M5175.0 106.0 L6435.0 106.0" fill="none" data-name="MyContext"></path>
+<path d="M5175.0 182.0 L6435.0 182.0" fill="none" data-name="MyContext"></path>
+</g>
+<g transform="translate(5175, 75)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MyContext">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="MyContext">
+<a id="..\src\types.ts.MyContext" xlink:href="..\src\types.ts"><text x="622.0" y="13.5" stroke="none" text-anchor="middle" data-name="MyContext">MyContext</text></a>
+
+</g>
+</g>
+<g transform="translate(5175, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MyContext">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="MyContext">
+<text x="0.0" y="13.5" stroke="none" data-name="MyContext">+req: Request&lt;ParamsDictionary, any, any, qs.ParsedQs, Record&lt;string, any&gt;&gt; &amp; { session: Session &amp; Partial&lt;SessionData&gt; &amp; { userId?: number | undefined</text>
+<text x="0.0" y="28.5" stroke="none" data-name="MyContext">}</text>
+<text x="0.0" y="43.5" stroke="none" data-name="MyContext">}</text>
+<text x="0.0" y="58.5" stroke="none" data-name="MyContext">+res: Response&lt;any, Record&lt;string, any&gt;&gt;</text>
+
+</g>
+</g>
+<g transform="translate(5175, 182)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="MyContext">
+<g transform="translate(8, 8)" fill="#33322E" data-name="MyContext">
+
+</g>
+</g>
+</g>
+<g data-name="BaseEntity">
+<g fill="#eee8d5" stroke="#33322E" data-name="BaseEntity">
+<rect x="2664.0" y="83.0" height="100.0" width="248.0" data-name="BaseEntity"></rect>
+<path d="M2664.0 114.0 L2912.0 114.0" fill="none" data-name="BaseEntity"></path>
+<path d="M2664.0 175.0 L2912.0 175.0" fill="none" data-name="BaseEntity"></path>
+</g>
+<g transform="translate(2664, 83)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="BaseEntity">
+<a id="..\src\entities\BaseEntity.ts.BaseEntity" xlink:href="..\src\entities\BaseEntity.ts"><text x="116.0" y="13.5" stroke="none" text-anchor="middle" data-name="BaseEntity">BaseEntity</text></a>
+
+</g>
+</g>
+<g transform="translate(2664, 114)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="BaseEntity">
+<text x="0.0" y="13.5" stroke="none" data-name="BaseEntity">+id: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="BaseEntity">+createdAt: Date | undefined</text>
+<text x="0.0" y="43.5" stroke="none" data-name="BaseEntity">+updatedAt: Date | undefined</text>
+
+</g>
+</g>
+<g transform="translate(2664, 175)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="BaseEntity">
+<g transform="translate(8, 8)" fill="#33322E" data-name="BaseEntity">
+
+</g>
+</g>
+</g>
+<g data-name="Hotel">
+<g fill="#eee8d5" stroke="#33322E" data-name="Hotel">
+<rect x="2043.0" y="305.0" height="445.0" width="349.0" data-name="Hotel"></rect>
+<path d="M2043.0 336.0 L2392.0 336.0" fill="none" data-name="Hotel"></path>
+<path d="M2043.0 742.0 L2392.0 742.0" fill="none" data-name="Hotel"></path>
+</g>
+<g transform="translate(2043, 305)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Hotel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Hotel">
+<a id="..\src\entities\Hotel.ts.Hotel" xlink:href="..\src\entities\Hotel.ts"><text x="166.5" y="13.5" stroke="none" text-anchor="middle" data-name="Hotel">Hotel</text></a>
+
+</g>
+</g>
+<g transform="translate(2043, 336)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Hotel">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Hotel">
+<text x="0.0" y="13.5" stroke="none" data-name="Hotel">+siteOrigin: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="Hotel">+hotelName: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="Hotel">+locationName: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="Hotel">+priceTotal: number | undefined</text>
+<text x="0.0" y="73.5" stroke="none" data-name="Hotel">+priceTotalInRON: number | undefined</text>
+<text x="0.0" y="88.5" stroke="none" data-name="Hotel">+priceNight: number | undefined</text>
+<text x="0.0" y="103.5" stroke="none" data-name="Hotel">+priceRoom: number | undefined</text>
+<text x="0.0" y="118.5" stroke="none" data-name="Hotel">+currency: string</text>
+<text x="0.0" y="133.5" stroke="none" data-name="Hotel">+rating: string | undefined</text>
+<text x="0.0" y="148.5" stroke="none" data-name="Hotel">+distanceFromLocation: string | undefined</text>
+<text x="0.0" y="163.5" stroke="none" data-name="Hotel">+adults: number</text>
+<text x="0.0" y="178.5" stroke="none" data-name="Hotel">+rooms: number</text>
+<text x="0.0" y="193.5" stroke="none" data-name="Hotel">+nights: number | undefined</text>
+<text x="0.0" y="208.5" stroke="none" data-name="Hotel">+childAges: number[]</text>
+<text x="0.0" y="223.5" stroke="none" data-name="Hotel">+children: number</text>
+<text x="0.0" y="238.5" stroke="none" data-name="Hotel">+reviews: string | undefined</text>
+<text x="0.0" y="253.5" stroke="none" data-name="Hotel">+link: string</text>
+<text x="0.0" y="268.5" stroke="none" data-name="Hotel">+imageLink: string | undefined</text>
+<text x="0.0" y="283.5" stroke="none" data-name="Hotel">+checkIn: Date</text>
+<text x="0.0" y="298.5" stroke="none" data-name="Hotel">+checkOut: Date</text>
+<text x="0.0" y="313.5" stroke="none" data-name="Hotel">+lat: number | undefined</text>
+<text x="0.0" y="328.5" stroke="none" data-name="Hotel">+lon: number | undefined</text>
+<text x="0.0" y="343.5" stroke="none" data-name="Hotel">+country: string</text>
+<text x="0.0" y="358.5" stroke="none" data-name="Hotel">+area: string | undefined</text>
+<text x="0.0" y="373.5" stroke="none" data-name="Hotel">+adress: string | undefined</text>
+<text x="0.0" y="388.5" stroke="none" data-name="Hotel">+region: string | undefined</text>
+
+</g>
+</g>
+<g transform="translate(2043, 742)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Hotel">
+<g transform="translate(8, 8)" fill="#33322E" data-name="Hotel">
+
+</g>
+</g>
+</g>
+<g data-name="LocationDecoderConfiguration">
+<g fill="#eee8d5" stroke="#33322E" data-name="LocationDecoderConfiguration">
+<rect x="2432.0" y="470.0" height="115.0" width="328.0" data-name="LocationDecoderConfiguration"></rect>
+<path d="M2432.0 501.0 L2760.0 501.0" fill="none" data-name="LocationDecoderConfiguration"></path>
+<path d="M2432.0 577.0 L2760.0 577.0" fill="none" data-name="LocationDecoderConfiguration"></path>
+</g>
+<g transform="translate(2432, 470)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="LocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LocationDecoderConfiguration">
+<a id="..\src\entities\LocationDecoderConfiguration.ts.LocationDecoderConfiguration" xlink:href="..\src\entities\LocationDecoderConfiguration.ts"><text x="156.0" y="13.5" stroke="none" text-anchor="middle" data-name="LocationDecoderConfiguration">LocationDecoderConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(2432, 501)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LocationDecoderConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="LocationDecoderConfiguration">+needStyle: boolean</text>
+<text x="0.0" y="28.5" stroke="none" data-name="LocationDecoderConfiguration">+resolveCaptcha: boolean</text>
+<text x="0.0" y="43.5" stroke="none" data-name="LocationDecoderConfiguration">+url: URL</text>
+<text x="0.0" y="58.5" stroke="none" data-name="LocationDecoderConfiguration">+formConfiguration: IFormConfiguration</text>
+
+</g>
+</g>
+<g transform="translate(2432, 577)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="LocationDecoderConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="LocationDecoderURL">
+<g fill="#eee8d5" stroke="#33322E" data-name="LocationDecoderURL">
+<rect x="3233.0" y="470.0" height="115.0" width="267.0" data-name="LocationDecoderURL"></rect>
+<path d="M3233.0 501.0 L3500.0 501.0" fill="none" data-name="LocationDecoderURL"></path>
+<path d="M3233.0 577.0 L3500.0 577.0" fill="none" data-name="LocationDecoderURL"></path>
+</g>
+<g transform="translate(3233, 470)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="LocationDecoderURL">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LocationDecoderURL">
+<a id="..\src\entities\LocationDecoderURL.ts.LocationDecoderURL" xlink:href="..\src\entities\LocationDecoderURL.ts"><text x="125.5" y="13.5" stroke="none" text-anchor="middle" data-name="LocationDecoderURL">LocationDecoderURL</text></a>
+
+</g>
+</g>
+<g transform="translate(3233, 501)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderURL">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LocationDecoderURL">
+<text x="0.0" y="13.5" stroke="none" data-name="LocationDecoderURL">+siteOrigin: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="LocationDecoderURL">+locationName: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="LocationDecoderURL">+locationId: number | undefined</text>
+<text x="0.0" y="58.5" stroke="none" data-name="LocationDecoderURL">+extractedURL: string</text>
+
+</g>
+</g>
+<g transform="translate(3233, 577)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderURL">
+<g transform="translate(8, 8)" fill="#33322E" data-name="LocationDecoderURL">
+
+</g>
+</g>
+</g>
+<g data-name="RequestConfiguration">
+<g fill="#eee8d5" stroke="#33322E" data-name="RequestConfiguration">
+<rect x="4970.0" y="448.0" height="160.0" width="188.0" data-name="RequestConfiguration"></rect>
+<path d="M4970.0 479.0 L5158.0 479.0" fill="none" data-name="RequestConfiguration"></path>
+<path d="M4970.0 600.0 L5158.0 600.0" fill="none" data-name="RequestConfiguration"></path>
+</g>
+<g transform="translate(4970, 448)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RequestConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RequestConfiguration">
+<a id="..\src\entities\RequestConfiguration.ts.RequestConfiguration" xlink:href="..\src\entities\RequestConfiguration.ts"><text x="86.0" y="13.5" stroke="none" text-anchor="middle" data-name="RequestConfiguration">RequestConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(4970, 479)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RequestConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RequestConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="RequestConfiguration">+siteOrigin: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="RequestConfiguration">+requestURL: string</text>
+<text x="0.0" y="43.5" stroke="none" data-name="RequestConfiguration">+apiType: ApiType</text>
+<text x="0.0" y="58.5" stroke="none" data-name="RequestConfiguration">+headers: any</text>
+<text x="0.0" y="73.5" stroke="none" data-name="RequestConfiguration">+payload: any</text>
+<text x="0.0" y="88.5" stroke="none" data-name="RequestConfiguration">+queryParams: any</text>
+<text x="0.0" y="103.5" stroke="none" data-name="RequestConfiguration">+method: string</text>
+
+</g>
+</g>
+<g transform="translate(4970, 600)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RequestConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RequestConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="ScraperConfiguration">
+<g fill="#eee8d5" stroke="#33322E" data-name="ScraperConfiguration">
+<rect x="2800.0" y="395.0" height="265.0" width="393.0" data-name="ScraperConfiguration"></rect>
+<path d="M2800.0 426.0 L3193.0 426.0" fill="none" data-name="ScraperConfiguration"></path>
+<path d="M2800.0 652.0 L3193.0 652.0" fill="none" data-name="ScraperConfiguration"></path>
+</g>
+<g transform="translate(2800, 395)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ScraperConfiguration">
+<a id="..\src\entities\ScraperConfiguration.ts.ScraperConfiguration" xlink:href="..\src\entities\ScraperConfiguration.ts"><text x="188.5" y="13.5" stroke="none" text-anchor="middle" data-name="ScraperConfiguration">ScraperConfiguration</text></a>
+
+</g>
+</g>
+<g transform="translate(2800, 426)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ScraperConfiguration">
+<text x="0.0" y="13.5" stroke="none" data-name="ScraperConfiguration">+siteOrigin: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="ScraperConfiguration">+workerType: WorkerType</text>
+<text x="0.0" y="43.5" stroke="none" data-name="ScraperConfiguration">+pageItemCount: number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="ScraperConfiguration">+infiniteScroll: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="ScraperConfiguration">+virtualization: boolean</text>
+<text x="0.0" y="88.5" stroke="none" data-name="ScraperConfiguration">+pagination: boolean</text>
+<text x="0.0" y="103.5" stroke="none" data-name="ScraperConfiguration">+ssr: boolean</text>
+<text x="0.0" y="118.5" stroke="none" data-name="ScraperConfiguration">+decodedURLQueryParams: boolean</text>
+<text x="0.0" y="133.5" stroke="none" data-name="ScraperConfiguration">+payload: boolean</text>
+<text x="0.0" y="148.5" stroke="none" data-name="ScraperConfiguration">+query: boolean</text>
+<text x="0.0" y="163.5" stroke="none" data-name="ScraperConfiguration">+initialPaginationValue: number</text>
+<text x="0.0" y="178.5" stroke="none" data-name="ScraperConfiguration">+offset: number</text>
+<text x="0.0" y="193.5" stroke="none" data-name="ScraperConfiguration">+needStyle: boolean</text>
+<text x="0.0" y="208.5" stroke="none" data-name="ScraperConfiguration">+scrapeSelectors: IScrapeSelectors | undefined</text>
+
+</g>
+</g>
+<g transform="translate(2800, 652)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ScraperConfiguration">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ScraperConfiguration">
+
+</g>
+</g>
+</g>
+<g data-name="LocationDecoder">
+<g fill="#eee8d5" stroke="#33322E" data-name="LocationDecoder">
+<rect x="6698.0" y="26.0" height="213.0" width="283.0" data-name="LocationDecoder"></rect>
+<path d="M6698.0 57.0 L6981.0 57.0" fill="none" data-name="LocationDecoder"></path>
+<path d="M6698.0 103.0 L6981.0 103.0" fill="none" data-name="LocationDecoder"></path>
+</g>
+<g transform="translate(6698, 26)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="LocationDecoder">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LocationDecoder">
+<a id=".LocationDecoder" xlink:href=""><text x="133.5" y="13.5" stroke="none" text-anchor="middle" data-name="LocationDecoder">LocationDecoder</text></a>
+
+</g>
+</g>
+<g transform="translate(6698, 57)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoder">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LocationDecoder">
+<text x="0.0" y="13.5" stroke="none" data-name="LocationDecoder">-locationName: string</text>
+<text x="0.0" y="28.5" stroke="none" data-name="LocationDecoder">-locationDecoderURLService: any</text>
+
+</g>
+</g>
+<g transform="translate(6698, 103)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoder">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LocationDecoder">
+<text x="0.0" y="13.5" stroke="none" data-name="LocationDecoder">-click(): Promise&lt;void&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="LocationDecoder">-acceptCookies(): Promise&lt;void&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="LocationDecoder">-solveCaptcha(): Promise&lt;void&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="LocationDecoder">-delay(): Promise&lt;unknown&gt;</text>
+<text x="0.0" y="73.5" stroke="none" data-name="LocationDecoder">-clearInput(): Promise&lt;void&gt;</text>
+<text x="0.0" y="88.5" stroke="none" data-name="LocationDecoder">-search(): Promise&lt;URL&gt;</text>
+<text x="0.0" y="103.5" stroke="none" data-name="LocationDecoder">+getOneUrl(): Promise&lt;URL&gt;</text>
+<text x="0.0" y="118.5" stroke="none" data-name="LocationDecoder">+getAllUrls(): Promise&lt;URL[]&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="HotelMetadata">
+<g fill="#eee8d5" stroke="#33322E" data-name="HotelMetadata">
+<rect x="7021.0" y="90.0" height="85.0" width="140.0" data-name="HotelMetadata"></rect>
+<path d="M7021.0 121.0 L7161.0 121.0" fill="none" data-name="HotelMetadata"></path>
+<path d="M7021.0 167.0 L7161.0 167.0" fill="none" data-name="HotelMetadata"></path>
+</g>
+<g transform="translate(7021, 90)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="HotelMetadata">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HotelMetadata">
+<a id="..\src\resolvers\HotelResolver.ts.HotelMetadata" xlink:href="..\src\resolvers\HotelResolver.ts"><text x="62.0" y="13.5" stroke="none" text-anchor="middle" data-name="HotelMetadata">HotelMetadata</text></a>
+
+</g>
+</g>
+<g transform="translate(7021, 121)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelMetadata">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HotelMetadata">
+<text x="0.0" y="13.5" stroke="none" data-name="HotelMetadata">+limit: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="HotelMetadata">+offset: number</text>
+
+</g>
+</g>
+<g transform="translate(7021, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelMetadata">
+<g transform="translate(8, 8)" fill="#33322E" data-name="HotelMetadata">
+
+</g>
+</g>
+</g>
+<g data-name="Room">
+<g fill="#eee8d5" stroke="#33322E" data-name="Room">
+<rect x="6475.0" y="485.0" height="85.0" width="183.0" data-name="Room"></rect>
+<path d="M6475.0 516.0 L6658.0 516.0" fill="none" data-name="Room"></path>
+<path d="M6475.0 562.0 L6658.0 562.0" fill="none" data-name="Room"></path>
+</g>
+<g transform="translate(6475, 485)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Room">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Room">
+<a id=".Room" xlink:href=""><text x="83.5" y="13.5" stroke="none" text-anchor="middle" data-name="Room">Room</text></a>
+
+</g>
+</g>
+<g transform="translate(6475, 516)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Room">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Room">
+<text x="0.0" y="13.5" stroke="none" data-name="Room">+adults: number</text>
+<text x="0.0" y="28.5" stroke="none" data-name="Room">+childAges: number[]</text>
+
+</g>
+</g>
+<g transform="translate(6475, 562)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Room">
+<g transform="translate(8, 8)" fill="#33322E" data-name="Room">
+
+</g>
+</g>
+</g>
+<g data-name="UserInput">
+<g fill="#eee8d5" stroke="#33322E" data-name="UserInput">
+<rect x="11243.0" y="470.0" height="115.0" width="188.0" data-name="UserInput"></rect>
+<path d="M11243.0 501.0 L11431.0 501.0" fill="none" data-name="UserInput"></path>
+<path d="M11243.0 577.0 L11431.0 577.0" fill="none" data-name="UserInput"></path>
+</g>
+<g transform="translate(11243, 470)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="UserInput">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="UserInput">
+<a id=".UserInput" xlink:href=""><text x="86.0" y="13.5" stroke="none" text-anchor="middle" data-name="UserInput">UserInput</text></a>
+
+</g>
+</g>
+<g transform="translate(11243, 501)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserInput">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="UserInput">
+<text x="0.0" y="13.5" stroke="none" data-name="UserInput">+checkIn: Date</text>
+<text x="0.0" y="28.5" stroke="none" data-name="UserInput">+checkOut: Date</text>
+<text x="0.0" y="43.5" stroke="none" data-name="UserInput">+locationName: string</text>
+<text x="0.0" y="58.5" stroke="none" data-name="UserInput">+rooms: Room[]</text>
+
+</g>
+</g>
+<g transform="translate(11243, 577)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="UserInput">
+<g transform="translate(8, 8)" fill="#33322E" data-name="UserInput">
+
+</g>
+</g>
+</g>
+<g data-name="PaginatedHotels">
+<g fill="#eee8d5" stroke="#33322E" data-name="PaginatedHotels">
+<rect x="7201.0" y="90.0" height="85.0" width="263.0" data-name="PaginatedHotels"></rect>
+<path d="M7201.0 121.0 L7464.0 121.0" fill="none" data-name="PaginatedHotels"></path>
+<path d="M7201.0 167.0 L7464.0 167.0" fill="none" data-name="PaginatedHotels"></path>
+</g>
+<g transform="translate(7201, 90)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="PaginatedHotels">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="PaginatedHotels">
+<a id=".PaginatedHotels" xlink:href=""><text x="123.5" y="13.5" stroke="none" text-anchor="middle" data-name="PaginatedHotels">PaginatedHotels</text></a>
+
+</g>
+</g>
+<g transform="translate(7201, 121)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PaginatedHotels">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="PaginatedHotels">
+<text x="0.0" y="13.5" stroke="none" data-name="PaginatedHotels">+hotels: Hotel[][]</text>
+<text x="0.0" y="28.5" stroke="none" data-name="PaginatedHotels">+hasMore: boolean | undefined</text>
+
+</g>
+</g>
+<g transform="translate(7201, 167)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="PaginatedHotels">
+<g transform="translate(8, 8)" fill="#33322E" data-name="PaginatedHotels">
+
+</g>
+</g>
+</g>
+<g data-name="HotelResolver">
+<g fill="#eee8d5" stroke="#33322E" data-name="HotelResolver">
+<rect x="7504.0" y="86.0" height="93.0" width="441.0" data-name="HotelResolver"></rect>
+<path d="M7504.0 117.0 L7945.0 117.0" fill="none" data-name="HotelResolver"></path>
+<path d="M7504.0 148.0 L7945.0 148.0" fill="none" data-name="HotelResolver"></path>
+</g>
+<g transform="translate(7504, 86)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="HotelResolver">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HotelResolver">
+<a id=".HotelResolver" xlink:href=""><text x="212.5" y="13.5" stroke="none" text-anchor="middle" data-name="HotelResolver">HotelResolver</text></a>
+
+</g>
+</g>
+<g transform="translate(7504, 117)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelResolver">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HotelResolver">
+<text x="0.0" y="13.5" stroke="none" data-name="HotelResolver">-hotelService: default</text>
+
+</g>
+</g>
+<g transform="translate(7504, 148)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelResolver">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HotelResolver">
+<text x="0.0" y="13.5" stroke="none" data-name="HotelResolver">+getGeniusHotelsOffers(): Promise&lt;PaginatedHotels&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="HotelService">
+<g fill="#eee8d5" stroke="#33322E" data-name="HotelService">
+<rect x="7985.0" y="75.0" height="115.0" width="436.0" data-name="HotelService"></rect>
+<path d="M7985.0 106.0 L8421.0 106.0" fill="none" data-name="HotelService"></path>
+<path d="M7985.0 114.0 L8421.0 114.0" fill="none" data-name="HotelService"></path>
+</g>
+<g transform="translate(7985, 75)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="HotelService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="HotelService">
+<a id=".HotelService" xlink:href=""><text x="210.0" y="13.5" stroke="none" text-anchor="middle" data-name="HotelService">HotelService</text></a>
+
+</g>
+</g>
+<g transform="translate(7985, 106)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelService">
+<g transform="translate(8, 8)" fill="#33322E" data-name="HotelService">
+
+</g>
+</g>
+<g transform="translate(7985, 114)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="HotelService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="HotelService">
+<text x="0.0" y="13.5" stroke="none" data-name="HotelService">+searchExistsToday(): Promise&lt;boolean&gt;</text>
+<text x="0.0" y="28.5" stroke="none" data-name="HotelService">+getHotelsByNameSortedByPrice(): Promise&lt;Hotel[]&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="HotelService">+getHotelsByUserInput(): Promise&lt;any&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="HotelService">+saveHotels(): Promise&lt;void&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="LocationDecoderURLService">
+<g fill="#eee8d5" stroke="#33322E" data-name="LocationDecoderURLService">
+<rect x="8461.0" y="98.0" height="70.0" width="536.0" data-name="LocationDecoderURLService"></rect>
+<path d="M8461.0 129.0 L8997.0 129.0" fill="none" data-name="LocationDecoderURLService"></path>
+<path d="M8461.0 137.0 L8997.0 137.0" fill="none" data-name="LocationDecoderURLService"></path>
+</g>
+<g transform="translate(8461, 98)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="LocationDecoderURLService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="LocationDecoderURLService">
+<a id=".LocationDecoderURLService" xlink:href=""><text x="260.0" y="13.5" stroke="none" text-anchor="middle" data-name="LocationDecoderURLService">LocationDecoderURLService</text></a>
+
+</g>
+</g>
+<g transform="translate(8461, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderURLService">
+<g transform="translate(8, 8)" fill="#33322E" data-name="LocationDecoderURLService">
+
+</g>
+</g>
+<g transform="translate(8461, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="LocationDecoderURLService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="LocationDecoderURLService">
+<text x="0.0" y="13.5" stroke="none" data-name="LocationDecoderURLService">+checkIfLocationIdStored(): Promise&lt;LocationDecoderURL | null&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="RequestConfigurationService">
+<g fill="#eee8d5" stroke="#33322E" data-name="RequestConfigurationService">
+<rect x="9037.0" y="98.0" height="70.0" width="624.0" data-name="RequestConfigurationService"></rect>
+<path d="M9037.0 129.0 L9661.0 129.0" fill="none" data-name="RequestConfigurationService"></path>
+<path d="M9037.0 137.0 L9661.0 137.0" fill="none" data-name="RequestConfigurationService"></path>
+</g>
+<g transform="translate(9037, 98)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="RequestConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="RequestConfigurationService">
+<a id=".RequestConfigurationService" xlink:href=""><text x="304.0" y="13.5" stroke="none" text-anchor="middle" data-name="RequestConfigurationService">RequestConfigurationService</text></a>
+
+</g>
+</g>
+<g transform="translate(9037, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RequestConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" data-name="RequestConfigurationService">
+
+</g>
+</g>
+<g transform="translate(9037, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="RequestConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="RequestConfigurationService">
+<text x="0.0" y="13.5" stroke="none" data-name="RequestConfigurationService">+getRequestConfigurationByDomain(): Promise&lt;RequestConfiguration | null&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="ScraperConfigurationService">
+<g fill="#eee8d5" stroke="#33322E" data-name="ScraperConfigurationService">
+<rect x="9701.0" y="98.0" height="70.0" width="603.0" data-name="ScraperConfigurationService"></rect>
+<path d="M9701.0 129.0 L10304.0 129.0" fill="none" data-name="ScraperConfigurationService"></path>
+<path d="M9701.0 137.0 L10304.0 137.0" fill="none" data-name="ScraperConfigurationService"></path>
+</g>
+<g transform="translate(9701, 98)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="ScraperConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="ScraperConfigurationService">
+<a id=".ScraperConfigurationService" xlink:href=""><text x="293.5" y="13.5" stroke="none" text-anchor="middle" data-name="ScraperConfigurationService">ScraperConfigurationService</text></a>
+
+</g>
+</g>
+<g transform="translate(9701, 129)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ScraperConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" data-name="ScraperConfigurationService">
+
+</g>
+</g>
+<g transform="translate(9701, 137)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="ScraperConfigurationService">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="ScraperConfigurationService">
+<text x="0.0" y="13.5" stroke="none" data-name="ScraperConfigurationService">+getScraperConfigurationByOrigin(): Promise&lt;ScraperConfiguration | null&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="Scraper">
+<g fill="#eee8d5" stroke="#33322E" data-name="Scraper">
+<rect x="10344.0" y="41.0" height="183.0" width="446.0" data-name="Scraper"></rect>
+<path d="M10344.0 72.0 L10790.0 72.0" fill="none" data-name="Scraper"></path>
+<path d="M10344.0 193.0 L10790.0 193.0" fill="none" data-name="Scraper"></path>
+</g>
+<g transform="translate(10344, 41)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="Scraper">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="Scraper">
+<a id=".Scraper" xlink:href=""><text x="215.0" y="13.5" stroke="none" text-anchor="middle" data-name="Scraper">Scraper</text></a>
+
+</g>
+</g>
+<g transform="translate(10344, 72)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Scraper">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Scraper">
+<text x="0.0" y="13.5" stroke="none" data-name="Scraper">-urls: URL[]</text>
+<text x="0.0" y="28.5" stroke="none" data-name="Scraper">-userInput: IUserInput</text>
+<text x="0.0" y="43.5" stroke="none" data-name="Scraper">-pool: WorkerPool&lt;WorkerPayload, WorkerResponse&gt;</text>
+<text x="0.0" y="58.5" stroke="none" data-name="Scraper">-scraperConfigurationService: default</text>
+<text x="0.0" y="73.5" stroke="none" data-name="Scraper">-requestConfigurationService: default</text>
+<text x="0.0" y="88.5" stroke="none" data-name="Scraper">-hotelService: default</text>
+<text x="0.0" y="103.5" stroke="none" data-name="Scraper">-eventEmitter: EventEmitter</text>
+
+</g>
+</g>
+<g transform="translate(10344, 193)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="Scraper">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="Scraper">
+<text x="0.0" y="13.5" stroke="none" data-name="Scraper">+scrape(): Promise&lt;void&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="WorkerPool&lt;T,N&gt;">
+<g fill="#eee8d5" stroke="#33322E" data-name="WorkerPool&lt;T,N&gt;">
+<rect x="10830.0" y="19.0" height="228.0" width="373.0" data-name="WorkerPool&lt;T,N&gt;"></rect>
+<path d="M10830.0 50.0 L11203.0 50.0" fill="none" data-name="WorkerPool&lt;T,N&gt;"></path>
+<path d="M10830.0 171.0 L11203.0 171.0" fill="none" data-name="WorkerPool&lt;T,N&gt;"></path>
+</g>
+<g transform="translate(10830, 19)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="WorkerPool&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="WorkerPool&lt;T,N&gt;">
+<a id="..\src\worker-pool\WorkerPool.ts.WorkerPool&lt;T,N&gt;" xlink:href="..\src\worker-pool\WorkerPool.ts"><text x="178.5" y="13.5" stroke="none" text-anchor="middle" data-name="WorkerPool&lt;T,N&gt;">WorkerPool&lt;T,N&gt;</text></a>
+
+</g>
+</g>
+<g transform="translate(10830, 50)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerPool&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="WorkerPool&lt;T,N&gt;">
+<text x="0.0" y="13.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-queue: QueueItem&lt;T, N&gt;[]</text>
+<text x="0.0" y="28.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-workersById: { [key: number]: Worker</text>
+<text x="0.0" y="43.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">}</text>
+<text x="0.0" y="58.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-activeWorkersById: { [key: number]: boolean</text>
+<text x="0.0" y="73.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">}</text>
+<text x="0.0" y="88.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">+workerPath: string</text>
+<text x="0.0" y="103.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">+numberOfThreads: number</text>
+
+</g>
+</g>
+<g transform="translate(10830, 171)" font-family="Helvetica" font-size="12pt" font-weight="normal" font-style="normal" data-name="WorkerPool&lt;T,N&gt;">
+<g transform="translate(8, 8)" fill="#33322E" text-align="left" data-name="WorkerPool&lt;T,N&gt;">
+<text x="0.0" y="13.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-init(): null | undefined</text>
+<text x="0.0" y="28.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">+run(): Promise&lt;N&gt;</text>
+<text x="0.0" y="43.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-getInactiveWorkerId(): number</text>
+<text x="0.0" y="58.5" stroke="none" data-name="WorkerPool&lt;T,N&gt;">-runWorker(): Promise&lt;void&gt;</text>
+
+</g>
+</g>
+</g>
+<g data-name="JSONObject">
+<g fill="#eee8d5" stroke="#33322E" data-name="JSONObject">
+<rect x="127.0" y="117.0" height="31.0" width="112.0" data-name="JSONObject"></rect>
+</g>
+<g transform="translate(127, 117)" font-family="Helvetica" font-size="12pt" font-weight="bold" font-style="normal" data-name="JSONObject">
+<g transform="translate(8, 8)" fill="#33322E" text-align="center" data-name="JSONObject">
+<text x="48.0" y="13.5" stroke="none" text-anchor="middle" data-name="JSONObject">JSONObject</text>
+
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

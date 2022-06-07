@@ -7,49 +7,49 @@ import {
 } from '../../types';
 import { calculateTotalPriceByRoomPrice, calculateTotalPriceInRON, destructureRooms, extractCurrency, extractFloatFromString, getNights } from '../../utils/parseUtils';
 
-export const scraperConf: IScraperConfiguration = {
-  url: 'https://www.trip.com/',
+// export const scraperConf: IScraperConfiguration = {
+//   url: 'https://www.trip.com/',
 
-  workerType: 'Puppeteer',
+//   workerType: 'Puppeteer',
 
-  pageItemCount: 25,
+//   pageItemCount: 25,
 
-  initialPaginationValue: 0,
+//   initialPaginationValue: 0,
 
-  infiniteScroll: true,
+//   infiniteScroll: true,
 
-  pagination: false,
+//   pagination: false,
 
-  virtualization: false,
+//   virtualization: false,
 
-  ssr: false,
+//   ssr: false,
 
-  decodedURLQueryParams: false,
+//   decodedURLQueryParams: false,
 
-  payload: true,
+//   payload: true,
 
-  query: true,
+//   query: true,
 
-  needStyle: false,
+//   needStyle: false,
 
-  scrapeSelectors: {
-    showMoreSelector: {
-      selector: {
-        itemCount: -1,
-        query: '.list-btn-more',
-      },
-      type: 'text',
-    },
+//   scrapeSelectors: {
+//     showMoreSelector: {
+//       selector: {
+//         itemCount: -1,
+//         query: '.list-btn-more',
+//       },
+//       type: 'text',
+//     },
 
-    noElementsSelector: {
-      selector: {
-        itemCount: -1,
-        query: '.nothing',
-      },
-      type: 'text',
-    },
-  },
-};
+//     noElementsSelector: {
+//       selector: {
+//         itemCount: -1,
+//         query: '.nothing',
+//       },
+//       type: 'text',
+//     },
+//   },
+// };
 
 export const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -124,6 +124,8 @@ export const extractData = async (
   const { adults, childAges, children } = destructureRooms(rooms);
 
   const nights = getNights(checkIn, checkOut);
+
+  const res: any = [];
 
   hotels.forEach(async (h) => {
     if (h.hasChildNodes()) {
@@ -201,7 +203,8 @@ export const extractData = async (
           link,
         };
 
-        await Hotel.create(hotelData).save();
+        res.push(hotelData)
+        // await Hotel.create(hotelData).save();
       } catch (e) {
         console.log(h.querySelector('div.list-card-title > span.name')?.innerHTML);
         console.log(e);
@@ -210,4 +213,6 @@ export const extractData = async (
       console.log('null value')
     }
   });
+
+  return res;
 };

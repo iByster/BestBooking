@@ -9,29 +9,29 @@ import {
 } from '../../types';
 import { calculateTotalPriceInRON, destructureRooms, getNights } from '../../utils/parseUtils';
 
-export const scraperConf: IScraperConfiguration = {
-  url: 'https://www.agoda.com',
+// export const scraperConf: IScraperConfiguration = {
+//   url: 'https://www.agoda.com',
 
-  workerType: 'RequestGraphQL',
+//   workerType: 'RequestGraphQL',
 
-  pageItemCount: 25,
+//   pageItemCount: 25,
 
-  initialPaginationValue: 0,
+//   initialPaginationValue: 0,
 
-  infiniteScroll: false,
+//   infiniteScroll: false,
 
-  pagination: true,
+//   pagination: true,
 
-  virtualization: false,
+//   virtualization: false,
 
-  ssr: true,
+//   ssr: true,
 
-  decodedURLQueryParams: true,
+//   decodedURLQueryParams: true,
 
-  payload: true,
+//   payload: true,
 
-  query: true,
-};
+//   query: true,
+// };
 
 export const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -47,7 +47,8 @@ export const formConf: IFormConfiguration = {
 
   selectInputOption: {
     query:
-      '#frm > div.xp__fieldset.js--sb-fieldset.accommodation > div.xp__input-group.xp__search > div:nth-child(11) > div.c-autocomplete.sb-destination.-with-clear.region_second_line > ul.c-autocomplete__list.sb-autocomplete__list.sb-autocomplete__list-with_photos > li:first-child',
+      // '#frm > div.xp__fieldset.js--sb-fieldset.accommodation > div.xp__input-group.xp__search > div:nth-child(11) > div.c-autocomplete.sb-destination.-with-clear.region_second_line > ul.c-autocomplete__list.sb-autocomplete__list.sb-autocomplete__list-with_photos > li:first-child',
+      '#frm > div.xp__fieldset.js--sb-fieldset.accommodation > div.xp__input-group.xp__search > div:nth-child(11) > div.c-autocomplete.sb-destination.-with-clear.region_second_line > ul.c-autocomplete__list.sb-autocomplete__list.-visible > li:nth-child(1)',
     itemCount: 0,
     buttonVisible: true,
   },
@@ -167,6 +168,8 @@ export const extractData = async (
 
   console.log('WWW.BOOKING.COM', results.length);
 
+  const res = [];
+
   if (results.length > 0) {
     for (let i = 0; i < results.length; ++i) {
       try {
@@ -219,17 +222,14 @@ export const extractData = async (
         };
 
         // console.log(hotelData);
-
-        await Hotel.create(hotelData).save();
+        res.push(hotelData);
       } catch (e) {
         console.log(e);
       }
     }
-
-    return true;
   }
 
-  return false;
+  return res;
 };
 
 export const paginate = (payload: any, page: number) => {

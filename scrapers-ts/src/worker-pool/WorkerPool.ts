@@ -36,9 +36,8 @@ export class WorkerPool<T, N> {
           return resolve(result!);
         },
       };
-      // console.log('PARAMETER', getData());
+
       if (availableWorkerId === -1) {
-        // console.log(queueItem.getData());
         this.queue.push(queueItem);
         return null;
       }
@@ -56,9 +55,10 @@ export class WorkerPool<T, N> {
   }
 
   private async runWorker(workerId: number, queueItem: QueueItem<T, N>) {
+    console.log('WORKER ID: ', workerId)
     const worker = this.workersById[workerId];
-
     this.activeWorkersById[workerId] = true;
+  
     const messageCallback = (result: N) => {
       queueItem.callback(null, result);
       cleanUp();
@@ -73,15 +73,17 @@ export class WorkerPool<T, N> {
       worker.removeAllListeners('message');
       worker.removeAllListeners('error');
       this.activeWorkersById[workerId] = false;
-      if (!this.queue.length) {
+
+      if (!(this.queue.length > 0)) {
+        console.log('exit');
         return null;
       }
-      
+  
       this.runWorker(workerId, this.queue.shift()!);
     };
     worker.once('message', messageCallback);
     worker.once('error', errorCallback);
-    const data = await queueItem.getData();
-    worker.postMessage(data);
+
+    worker.postMessage(await queueItem.getData());
   }
 }

@@ -17,6 +17,7 @@ import { LocationDecoderURL } from '../entities/LocationDecoderURL';
 class LocationDecoder {
   private configurations: ILocationDecoderConfiguration[];
   private locationName: string;
+  
 
   constructor(
     configurations: ILocationDecoderConfiguration[],
@@ -216,15 +217,17 @@ class LocationDecoder {
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
       maxConcurrency: 4,
+      timeout: 300000,
       puppeteerOptions: {
         args: minimal_args,
-        headless: false,
+        headless: true,
         userDataDir: path.join(__dirname, './userCache'),
         ignoreDefaultArgs: ['--disable-extensions', '--enable-automation'],
         defaultViewport: { width: 1920, height: 1080 },
       },
       monitor: true,
       retryLimit: 1,
+
     });
 
     await cluster.task(async ({ page, data }) => {

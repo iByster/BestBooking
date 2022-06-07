@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@types/exchange-rates-api": "^1.0.0",
+    "@types/express-session": "^1.17.4",
     "@types/jsdom": "^16.2.14",
     "@types/user-agents": "^1.0.2",
     "nodemon": "^2.0.16",
@@ -23,9 +24,15 @@
   "dependencies": {
     "@antiadmin/anticaptchaofficial": "^1.0.22",
     "adm-zip": "^0.5.9",
+    "apollo-server-core": "^3.8.2",
+    "apollo-server-express": "^3.8.2",
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "got": "10.0.4",
+    "graphql": "^15.3.0",
     "jsdom": "^19.0.0",
     "moment": "^2.29.3",
     "pg": "^8.7.3",
@@ -36,7 +43,9 @@
     "puppeteer-extra-plugin-recaptcha": "^3.5.0",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
     "tslib": "^2.4.0",
+    "type-graphql": "^1.1.1",
     "typeorm": "^0.3.6",
-    "user-agents": "^1.0.1036"
+    "user-agents": "^1.0.1036",
+    "wait-for-event": "^2.0.1"
   }
 }

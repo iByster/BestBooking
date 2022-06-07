@@ -10,29 +10,29 @@ import { Hotel } from '../../entities/Hotel';
 import { calculateTotalPriceInRON, destructureRooms, getNights } from '../../utils/parseUtils';
 
 // : IScraperConfiguration
-export const scraperConf: IScraperConfiguration = {
-  url: 'https://www.agoda.com',
+// export const scraperConf: IScraperConfiguration = {
+//   url: 'https://www.agoda.com',
 
-  workerType: 'RequestGraphQL',
+//   workerType: 'RequestGraphQL',
 
-  pageItemCount: 1,
+//   pageItemCount: 1,
 
-  infiniteScroll: true,
+//   infiniteScroll: true,
 
-  pagination: true,
+//   pagination: true,
 
-  virtualization: true,
+//   virtualization: true,
 
-  initialPaginationValue: 1,
+//   initialPaginationValue: 1,
 
-  ssr: false,
+//   ssr: false,
 
-  decodedURLQueryParams: false,
+//   decodedURLQueryParams: false,
 
-  payload: true,
+//   payload: true,
 
-  query: false,
-};
+//   query: false,
+// };
 
 const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -184,6 +184,7 @@ export const extractData = async (
 
   console.log('WWW.AGODA.COM', properties.length);
   // console.log('WWW.AGODA.COM', console.log(properties));
+  const results = [];
 
   if (properties.length > 0) {
     for (let i = 0; i < properties.length; ++i) {
@@ -248,16 +249,16 @@ export const extractData = async (
               properties[i].content.informationSummary.address.country.name,
             area: properties[i].content.informationSummary.address.area.name,
           };
-          await Hotel.create(hotelData).save();
+
+          results.push(hotelData);
         } catch (e) {
           console.log(e);
         }
       }
     }
-    return true;
   }
 
-  return false;
+  return results;
 };
 
 export const paginate = (payload: any, page: number) => {

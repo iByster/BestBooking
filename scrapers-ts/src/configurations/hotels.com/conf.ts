@@ -5,31 +5,36 @@ import {
   IScraperConfiguration,
   IUserInput,
 } from '../../types';
-import { calculateTotalPriceInRON, destructureRooms, extractFloatFromString, getNights } from '../../utils/parseUtils';
+import {
+  calculateTotalPriceInRON,
+  destructureRooms,
+  extractFloatFromString,
+  getNights,
+} from '../../utils/parseUtils';
 
-export const scraperConf: IScraperConfiguration = {
-  url: 'https://www.hotels.com',
+// export const scraperConf: IScraperConfiguration = {
+//   url: 'https://www.hotels.com',
 
-  workerType: 'RequestGraphQL',
+//   workerType: 'RequestGraphQL',
 
-  pageItemCount: 50,
+//   pageItemCount: 50,
 
-  infiniteScroll: true,
+//   infiniteScroll: true,
 
-  pagination: true,
+//   pagination: true,
 
-  virtualization: true,
+//   virtualization: true,
 
-  initialPaginationValue: 0,
+//   initialPaginationValue: 0,
 
-  ssr: false,
+//   ssr: false,
 
-  decodedURLQueryParams: false,
+//   decodedURLQueryParams: false,
 
-  payload: true,
+//   payload: true,
 
-  query: false,
-};
+//   query: false,
+// };
 
 export const formConf: IFormConfiguration = {
   searchInputSelector: {
@@ -91,17 +96,18 @@ export const extractData = async (
   decodedURL: string
 ) => {
   const locations = response.data.propertySearch.propertySearchListings;
+  console.log('WWW.HOTELS.COM', locations.length);
+
+  const { checkIn, checkOut, rooms, locationName } = userInput;
+
+  const urlObject = new URL(decodedURL);
+
+  const { adults, childAges, children } = destructureRooms(rooms);
+
+  const nights = getNights(checkIn, checkOut);
+
+  const res = [];
   if (locations.length > 0) {
-    console.log('WWW.HOTELS.COM', locations.length);
-
-    const { checkIn, checkOut, rooms, locationName } = userInput;
-
-    const urlObject = new URL(decodedURL);
-
-    const { adults, childAges, children } = destructureRooms(rooms);
-
-    const nights = getNights(checkIn, checkOut);
-
     const currency =
       response.extensions.analytics[0].tealiumUtagData.currencyCode;
     const country = response.extensions.analytics[0].tealiumUtagData.country;
@@ -171,7 +177,7 @@ export const extractData = async (
 
           // console.log('avaialable')
 
-          await Hotel.create(hotelData).save();
+          res.push(hotelData);
         } else {
           // console.log('not avaialable')
         }
@@ -179,9 +185,9 @@ export const extractData = async (
         console.log(e);
       }
     }
-    return true;
   }
-  return false;
+
+  return res;
 };
 
 const extractLocationId = (decodedURL: string) => {

@@ -3,22 +3,18 @@ import { IScraperConfiguration, IUserInput } from '../types';
 import RequestConfigurationService from '../services/RequestConfigurationService';
 import delay from '../utils/delay';
 import rotateUserAgent from '../utils/rotateUserAgent';
+import { RequestConfiguration } from '../entities/RequestConfiguration';
 
 const runRESTRequestWorker = async (
   userInput: IUserInput,
   decodedURL: string,
-  conf: any
+  conf: any,
+  requestConfiguration: RequestConfiguration | null,
+  scraperConf: IScraperConfiguration,
+  page?: number
 ) => {
-  const requestConfigurationService = new RequestConfigurationService();
 
   const decodeURLObj = new URL(decodedURL);
-
-  const scraperConf = conf.scraperConf as IScraperConfiguration;
-
-  const requestConfiguration =
-    await requestConfigurationService.getRequestConfigurationByDomain(
-      decodeURLObj.origin
-    );
 
   if (requestConfiguration) {
     if (scraperConf.payload) {
