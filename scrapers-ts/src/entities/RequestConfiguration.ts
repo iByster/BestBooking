@@ -3,7 +3,6 @@ import { Column, Entity } from 'typeorm';
 
 type ApiType = 'GraphQL' | 'REST';
 
-
 @Entity()
 export class RequestConfiguration extends BaseEntity {
   @Column()

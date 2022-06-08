@@ -217,7 +217,7 @@ class LocationDecoder {
       puppeteer,
       concurrency: Cluster.CONCURRENCY_CONTEXT,
       maxConcurrency: 4,
-      timeout: 300000,
+      timeout: 60000,
       puppeteerOptions: {
         args: minimal_args,
         headless: true,
